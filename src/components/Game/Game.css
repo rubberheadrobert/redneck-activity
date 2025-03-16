@@ -1,0 +1,110 @@
+.game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: rgb(66, 113, 136);
+  color: whitesmoke;
+}
+
+.game-container > .game-top-icons-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 90%;
+  padding: 0rem;
+  margin-top: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.game-container > .button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.game-container > .game-icon-container {
+  background-color: rgb(131, 173, 194);
+  padding: 2.5rem;
+  border-radius: 5rem;
+  box-sizing: border-box;
+  height: 150px;
+  width: 150px;
+}
+
+.game-container > .game-icon-container > .fa-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: rgb(78, 132, 159);
+}
+
+.game-container > .game-icon-container > .icon-text {
+  font-size: 1rem;
+  padding: 0rem;
+  margin: 0rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.game-container > .button-container > button {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  font-size: 1.6rem;
+}
+
+.word-container{
+  font-size: 20px;
+  background-color: rgb(204, 192, 59);;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  color: whitesmoke;
+  z-index: 0;
+}
+
+.word-container > .show-random-word {
+  font-weight: bold; 
+}
+
+.word-container > .hide-random-word {
+  user-select: none;
+  color: silver;
+}
+
+.timer-circle-container {
+  position: relative;
+  width: 10rem;
+  height: 10rem;
+  margin: 0px;
+}
+
+.timer-circle {
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 5px solid #ccc;
+  border-top-color: #3498db; /* Change this color as per your preference */
+  transform-origin: 50% 50%;
+  transition: transform 1s linear;
+}
+
+.timer-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  font-weight: bold;
+  color: #3498db;
+}

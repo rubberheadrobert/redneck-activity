@@ -1,0 +1,14 @@
+.waiting-for-players-container {
+  width: 100%;
+}
+
+.joined-players {
+  display: flex;
+  flex-wrap: wrap;
+  direction: row;
+}
+
+.joined-players > div {
+  padding: 1rem;
+  margin: 1rem;
+}

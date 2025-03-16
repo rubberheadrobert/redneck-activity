@@ -1,0 +1,57 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: inherit;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  background: rgb(95, 153, 183);
+  padding: 20px;
+  border-radius: 8px;
+  border: 0.4rem solid rgb(255, 248, 172);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal > table {
+  font-size: 1.4rem;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.modal > table td {
+  padding: 5px;
+  text-shadow: 1px 1px 1px black;
+}
+
+.modal > h2 {
+  text-shadow: 2px 1px 1px black;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+  background: rgb(71, 125, 152);
+  border-radius: 8px;
+}
+
+.modal > table > tr > td > .fa-icon {
+  font-size: 1rem;
+  color: whitesmoke;
+  vertical-align: middle;
+  color: rgb(255, 248, 172);
+  padding-bottom: 0.3rem;
+}

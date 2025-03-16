@@ -1,0 +1,16 @@
+.create-game-container {
+  height: 100vh;
+  margin: 0px 0px;
+  padding: 0px 0px;
+  text-align: center;
+  width: 100%;
+}
+
+.create-game-container > h1 {
+  font-family: Fantasy;
+  font-size: 3rem;
+  font-weight: 300;
+}
+/* ----------------------- */
+
+/* Create Game Toggle Options */

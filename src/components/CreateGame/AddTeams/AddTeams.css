@@ -1,0 +1,48 @@
+.teams-container {
+  font-size: 1.5rem;
+}
+
+.teams-container > input {
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  user-select: none;
+
+  text-align: center;
+  font-size: 2rem;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+.teams-container > .available-input {
+  border: 2px whitesmoke solid;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+}
+
+.team1 {
+  background-color: red;
+}
+
+.team2 {
+  background-color: aqua;
+}
+
+.team3 {
+  background-color: blueviolet;
+}
+
+.team4 {
+  background-color: darkorange;
+}
+
+.team5 {
+  background-color: chartreuse;
+}
