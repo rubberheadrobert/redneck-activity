@@ -12,5 +12,5 @@ const StyledBanner = styled.div`
 `;
 
 export default function Banner() {
-  return <StyledBanner>Paraszt Activity</StyledBanner>;
+  return <StyledBanner>Redneck Activity</StyledBanner>;
 }
