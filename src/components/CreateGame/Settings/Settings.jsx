@@ -97,10 +97,17 @@ export default function Settings({
             Multiple Phones
           </GamesToggleButton>
         </section>
-        <ToggleInformation>
+        {/* use this when multiphone logic has been implemented */}
+        {/* <ToggleInformation>
           {isSinglePhone
             ? "Game will be played with a single phone"
             : "Each player will play with their own phone"}
+        </ToggleInformation> */}
+        {/* use this when multiphone logic has NOT been implemented yet */}
+        <ToggleInformation>
+          {isSinglePhone
+            ? "Game will be played with a single phone"
+            : "This feature has not been implemented yet"}
         </ToggleInformation>
       </ToggleContainer>
 
@@ -108,6 +115,7 @@ export default function Settings({
         prev="home"
         next="settings-sliders"
         buttonOnClick={handleCreateGameSettings}
+        isClickable={isSinglePhone}
       />
     </Container>
   );
