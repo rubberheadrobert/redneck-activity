@@ -14,3 +14,4 @@ const StyledBanner = styled.div`
 export default function Banner() {
   return <StyledBanner>Redneck Activity</StyledBanner>;
 }
+ 
