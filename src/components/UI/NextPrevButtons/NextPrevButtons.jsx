@@ -19,12 +19,23 @@ const StyledNavLink = styled(NavLink)`
 const StyledButton = styled.button`
   background-color: transparent;
   font-size: 2rem;
-  color: whitesmoke; !important;
+  color: whitesmoke !important;
   width: 4rem;
   height: 3rem;
   margin: 0.5rem;
   border: none;
   border-radius: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0; 
+`;
+
+const StyledIcon = styled(FontAwesomeIcon)`
+  width: 1.5em; 
+  height: 1.5em;
+  pointer-events: none;
 `;
 
 const StyledButtonDisabled = styled.button`
@@ -47,10 +58,10 @@ export default function NextPrevButtons({ prev, next, buttonOnClick, isClickable
         // this is if the previous page is not the home page
         <>
           <StyledButton onClick={buttonOnClick} name={prev}>
-            <FontAwesomeIcon icon="angles-left" />
+            <StyledIcon icon="angles-left" />
           </StyledButton>
           <StyledButton onClick={isClickable ? buttonOnClick : undefined} name={next} isClickable={isClickable}>
-            <FontAwesomeIcon icon="angles-right" />
+            <StyledIcon icon="angles-right" />
           </StyledButton>
         </>
       ) : (
@@ -58,19 +69,19 @@ export default function NextPrevButtons({ prev, next, buttonOnClick, isClickable
         {/*  this is if the previous page is the home page*/}
           <StyledNavLink to="/">
             <StyledButton>
-              <FontAwesomeIcon icon="angles-left"/>
+              <StyledIcon icon="angles-left"/>
             </StyledButton>
           </StyledNavLink>
           {next !== "no-next" && !isClickable &&(
             // this is if a setting is making the next page unavailable
             <StyledButtonDisabled onClick={isClickable ? buttonOnClick : undefined} name={next} isClickable={isClickable}>
-              <FontAwesomeIcon icon="angles-right" />
+              <StyledIcon icon="angles-right" />
             </StyledButtonDisabled>
           )}
           {next !== "no-next" && isClickable &&(
             
             <StyledButton onClick={buttonOnClick} name={next}>
-              <FontAwesomeIcon icon="angles-right" />
+              <StyledIcon icon="angles-right" />
             </StyledButton>
           )}
         </>
