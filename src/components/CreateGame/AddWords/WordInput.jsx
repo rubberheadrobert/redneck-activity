@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 
 const Input = styled.input`
-  font-size: 1.5rem;
+  font-size: 1rem;
   text-align: center;
   font-family: inherit;
   border-radius: 0.5rem;
+  width: 65%;
+  align-self: center;
 `;
 
 export default function WordInput({ index, wordsEditOnChange, word }) {

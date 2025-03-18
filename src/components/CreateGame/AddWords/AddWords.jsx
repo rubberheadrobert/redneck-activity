@@ -6,15 +6,6 @@ import Container from "../../UI/Container/Container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddWordsModal from "./AddWordsModal";
 
-const Title = styled.h1`
-  display: inline-block;
-  margin: 0.5rem auto;
-  padding: 0.2rem 1rem;
-  border-radius: 1rem;
-  color: whitesmoke;
-  background-color: rgb(130, 54, 214, 0.8);
-`;
-
 const ButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -40,19 +31,41 @@ const ButtonContainer = styled.div`
 `;
 
 const LoadingContainer = styled.div`
-  height: 0.5rem;
+  height: 1.5rem;
   width: 2rem;
+  margin: 0.3rem auto;
 `;
 
 const CurrentWordInput = styled.input`
-  font-size: 1.5rem;
+  font-size: 1rem;
   width: 80%;
+  height: 35%
   border: 3px white solid;
   border-radius: 0.5rem;
   font-family: inherit;
   padding: 0.5rem;
   text-align: center;
 `;
+
+const WordArea = styled.div`
+  background-color: rgb(130, 54, 214, 0.8);
+  border-radius: 0.5rem;
+  border: 5px solid whitesmoke;
+
+  h2 {
+    font-size: 1.1rem;
+    box-shadow: 0 0 10px whitesmoke;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    margin: 0.3em auto;
+    display: inline-block;
+  }
+
+  p {
+    font-size: 0.8rem;
+  }
+`;
+
 export default function AddWords({
   wordsAmount,
   players,
@@ -143,21 +156,22 @@ export default function AddWords({
   });
 
   return (
-    <Container backgroundImage={img}>
-      <Title>Add Words</Title>
-
-      <p>
-        {currentPlayerObj.name}, please add {currentWordsLeft} more words
-      </p>
-      <CurrentWordInput
-        type="text"
-        value={currentWord}
-        onChange={(e) => setCurrentWord(e.target.value)}
-        disabled={isLoading}
-      />
-      <LoadingContainer>
-        {isLoading && <FontAwesomeIcon icon="spinner" spin />}
-      </LoadingContainer>
+    <Container backgroundImage={img} secondColor={"#8236d6"}>
+      <h1>Add Words</h1>
+      <WordArea>
+        <h2> {currentPlayerObj.name}</h2>
+        <p>please add {currentWordsLeft} more words</p>
+        <CurrentWordInput
+          type="text"
+          value={currentWord}
+          onChange={(e) => setCurrentWord(e.target.value)}
+          placeholder
+          disabled={isLoading}
+        />
+        <LoadingContainer>
+          {isLoading && <FontAwesomeIcon icon="spinner" spin />}
+        </LoadingContainer>
+      </WordArea>
 
       <ButtonContainer>
         <button onClick={handleAddWord} disabled={!canAddWords || isLoading}>

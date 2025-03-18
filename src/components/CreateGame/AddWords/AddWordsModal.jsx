@@ -1,13 +1,12 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { styled } from "styled-components";
 import WordInput from "./WordInput";
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100% !important; 
+  height: 100% !important;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
