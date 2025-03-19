@@ -1,22 +1,26 @@
-import "./AddPlayers.css";
-import PlayerInput from "./PlayerInput/PlayerInput";
 import { useState, useEffect } from "react";
-
 import { styled } from "styled-components";
+
+import PlayerInput from "./PlayerInput/PlayerInput";
 import NextPrevButtons from "../../UI/NextPrevButtons/NextPrevButtons";
 import img from "../../../images/purple-paper.avif";
 import Container from "../..//UI/Container/Container.jsx";
 
 const InputContainer = styled.div`
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
   background-color: rgb(130, 54, 214, 0.8);
-  padding: 0.2rem 1rem;
+
   margin: 0.2rem 0.5rem;
   border-radius: 1rem;
   border: 5px solid whitesmoke;
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+  }
 
   h2 {
     font-size: 1rem;
@@ -33,20 +37,22 @@ const InputContainer = styled.div`
     text-align: center;
     margin: 0rem 0.5rem;
   }
-`;
 
-const Title = styled.h1`
-  display: inline-block;
-  margin: 0.5rem auto;
-  padding: 0.2rem 1rem;
-  border-radius: 1rem;
-  border: 5px solid whitesmoke;
-  color: whitesmoke;
-  background-color: rgb(130, 54, 214, 0.8);
+  @media (min-width: 576px) {
+  }
+  @media (min-width: 768px) {
+    h2 {
+      font-size: 130%;
+    }
+  }
+  @media (min-width: 992px) {
+  }
+  @media (min-width: 1200px) {
+  }
 `;
 
 const PlayerInputContainer = styled.div`
-  margin: 0.2rem 0.5rem;
+  margin: 0.5rem 0rem;
   padding: 0.2rem 0.5rem 0.2rem 0.5rem;
   background-color: rgb(130, 54, 214, 0.8);
   border-radius: 1rem;
@@ -100,58 +106,74 @@ const PlayerInputContainer = styled.div`
     font-style: italic;
     font-size: 1rem;
   }
+
+  @media (min-width: 576px) {
+  }
+  @media (min-width: 768px) {
+    max-height: 30rem;
+  }
+  @media (min-width: 992px) {
+  }
+  @media (min-width: 1200px) {
+  }
 `;
+
 export default function AddPlayers({
   handleCreateGameSettings,
   playersOnChange,
   players,
   playersAllOnChange,
+  playersLengthOnChange,
   numOfTeams,
   numOfTeamsOnChange,
 }) {
-  const [numOfPlayers, setNumOfPlayers] = useState(4);
+  const [numOfPlayers, setNumOfPlayers] = useState(6);
 
   const [playersSubmitted, setPlayersSubmitted] = useState(false);
 
   useEffect(() => {
-    // load numOfPlayers from localStorage
-    const savedNumOfPlayers = localStorage.getItem("numOfPlayers");
-    if (savedNumOfPlayers) {
-      setNumOfPlayers(savedNumOfPlayers);
-    }
-    // load numOfTeams from localStorage
-    const savedNumOfTeams = localStorage.getItem("numOfTeams");
-    if (savedNumOfTeams) {
-      numOfTeamsOnChange(savedNumOfTeams);
-    }
-    // load players from localStorage
-    const savedPlayers = localStorage.getItem("players");
-    if (savedPlayers) {
-      console.log("in loadplayers useEffect");
-      console.log(JSON.parse(savedPlayers));
-      playersAllOnChange(JSON.parse(savedPlayers));
-    } else{
-      const newArray = new Array(numOfPlayers).fill("")
-      playersAllOnChange(newArray)
-    }
-  }, []);
-
-  useEffect(() => {
-    //save players to localStorage
-    console.log("in saveplayers useEffect");
-    console.log(players);
-    localStorage.setItem("players", JSON.stringify(players));
-  }, [players]);
-
-  useEffect(() => {
-    // save numOfPlayers to localStorage
-    localStorage.setItem("numOfPlayers", numOfPlayers);
+    playersLengthOnChange(numOfPlayers);
   }, [numOfPlayers]);
 
-  useEffect(() => {
-    // save numOfTeams to localStorage
-    localStorage.setItem("numOfTeams", numOfTeams);
-  }, [numOfTeams]);
+  // useEffect(() => {
+  //   // load numOfPlayers from localStorage
+  //   const savedNumOfPlayers = localStorage.getItem("numOfPlayers");
+  //   if (savedNumOfPlayers) {
+  //     setNumOfPlayers(savedNumOfPlayers);
+  //   }
+  //   // load numOfTeams from localStorage
+  //   const savedNumOfTeams = localStorage.getItem("numOfTeams");
+  //   if (savedNumOfTeams) {
+  //     numOfTeamsOnChange(savedNumOfTeams);
+  //   }
+  //   // load players from localStorage
+  //   const savedPlayers = localStorage.getItem("players");
+  //   if (savedPlayers) {
+  //     console.log("in loadplayers useEffect");
+  //     console.log(JSON.parse(savedPlayers));
+  //     playersAllOnChange(JSON.parse(savedPlayers));
+  //   } else {
+  //     const newArray = new Array(numOfPlayers).fill("");
+  //     playersAllOnChange(newArray);
+  //   }
+  // }, []);
+
+  // useEffect(() => {
+  //   //save players to localStorage
+  //   console.log("in saveplayers useEffect");
+  //   console.log(players);
+  //   localStorage.setItem("players", JSON.stringify(players));
+  // }, [players]);
+
+  // useEffect(() => {
+  //   // save numOfPlayers to localStorage
+  //   localStorage.setItem("numOfPlayers", numOfPlayers);
+  // }, [numOfPlayers]);
+
+  // useEffect(() => {
+  //   // save numOfTeams to localStorage
+  //   localStorage.setItem("numOfTeams", numOfTeams);
+  // }, [numOfTeams]);
 
   // const inputs = Array.from({ length: numOfPlayers }, (_, index) => {
   //   return (
@@ -181,26 +203,31 @@ export default function AddPlayers({
   ));
 
   return (
-    <Container backgroundImage={img}>
-      <Title>Add Players</Title>
+    <Container backgroundImage={img} secondColor={"#8236d6"}>
+      <h1>Add Players</h1>
 
       <InputContainer>
-        <h2>Number of Players</h2>
-        <input
-          type="text"
-          value={numOfPlayers}
-          onChange={(e) => setNumOfPlayers(e.target.value)}
-          placeholder="number of players"
-        />
-        <h2>Number of Teams</h2>
-        <input
-          type="text"
-          onChange={(e) => {
-            numOfTeamsOnChange(e.target.value);
-          }}
-          value={numOfTeams}
-          placeholder="Number of teams..."
-        />
+        <div>
+          <h2>Number of Players</h2>
+          <input
+            type="text"
+            value={numOfPlayers}
+            onChange={(e) => setNumOfPlayers(e.target.value)}
+            placeholder="number of players"
+          />
+        </div>
+
+        <div>
+          <h2>Number of Teams</h2>
+          <input
+            type="text"
+            onChange={(e) => {
+              numOfTeamsOnChange(e.target.value);
+            }}
+            value={numOfTeams}
+            placeholder="Number of teams..."
+          />
+        </div>
       </InputContainer>
       <PlayerInputContainer>
         <h2>Players</h2>
