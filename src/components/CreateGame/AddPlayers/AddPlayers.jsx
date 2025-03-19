@@ -135,6 +135,11 @@ export default function AddPlayers({
     playersLengthOnChange(numOfPlayers);
   }, [numOfPlayers]);
 
+  useEffect(() => {
+    setNumOfPlayers(numOfPlayers)
+    numOfTeamsOnChange(numOfTeams)
+  }, [])
+
   // useEffect(() => {
   //   // load numOfPlayers from localStorage
   //   const savedNumOfPlayers = localStorage.getItem("numOfPlayers");
