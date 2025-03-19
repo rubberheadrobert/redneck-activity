@@ -102,19 +102,34 @@ export default function CreateGame() {
     console.log(newPlayers);
   }
 
-  function teamNamesOnChange(index, oldName, newName) {
-    if (arguments.length === 3) {
+  function teamNameOnChange(index, name) {
+    console.log("index: ", index);
+    console.log("name: ", name);
+    console.log("teamNames: ", teamNames);
+
+    if (arguments.length === 2) {
       setTeamNames((prevArray) => {
         const newArray = [...prevArray];
-        newArray[index] = {
-          ...newArray[index],
-          oldName: oldName,
-          newName: newName,
-        };
+        console.log("teamNameOnChange newArray", newArray);
+        console.log("teamNameOnChange name" + name);
+        newArray[index]["name"] = name;
+        console.log(newArray);
         return newArray;
       });
     } else if (arguments.length === 1) {
     }
+  
+  }
+
+  function numOfTeamsOnChange(num) {
+    setNumOfTeams(num);
+    const teamNames = [];
+    for (let i = 0; i < num; i++) {
+      const teamName = `Team ${i + 1}`;
+      teamNames.push({ oldName: teamName, name: teamName });
+    }
+    console.log("numOfTeamsOnChange:", teamNames);
+    setTeamNames(teamNames);
   }
 
   function playersOnChange(index, newName) {
@@ -135,6 +150,11 @@ export default function CreateGame() {
     console.log(words);
   }
 
+  
+  function playersLengthOnChange(newLength) {
+    setPlayers(new Array(Number(newLength)).fill({ name: "" }));
+  }
+
   function wordsOnChange(newWords) {
     setWords((prevWords) => prevWords.concat(newWords));
   }
@@ -145,6 +165,12 @@ export default function CreateGame() {
 
   function showCreateGameModalOnChange(bool) {
     setShowCreateGameModal(bool);
+  }
+
+  function playersInTeamsOnChange(arr) {
+    console.log("in playersInTeamsOnChange");
+
+    playersInTeams.current = arr;
   }
 
   return (
@@ -177,6 +203,8 @@ export default function CreateGame() {
           handleCreateGameSettings={handleCreateGameSettings}
           players={players}
           wordsEditOnChange={wordsEditOnChange}
+          playersLengthOnChange={playersLengthOnChange}
+
         />
       )}
       {shownOptions == _PLAYERS && (
@@ -184,19 +212,22 @@ export default function CreateGame() {
           handleCreateGameSettings={handleCreateGameSettings}
           players={players}
           numOfTeams={numOfTeams}
-          numOfTeamsOnChange={setNumOfTeams}
+          numOfTeamsOnChange={numOfTeamsOnChange}
           playersOnChange={playersOnChange}
           playersAllOnChange={playersAllOnChange}
+          playersLengthOnChange={playersLengthOnChange}
         />
       )}
       {shownOptions == _TEAMS && (
         <AddTeams
+          handleCreateGameSettings={handleCreateGameSettings}
           playersArray={players}
           numOfTeams={numOfTeams}
           teamNames={teamNames}
-          teamNamesOnChange={teamNamesOnChange}
+          teamNameOnChange={teamNameOnChange}
           playersAllOnChange={playersAllOnChange}
           shownOptionsOnChange={shownOptionsOnChange}
+          playersInTeamsOnChange={playersInTeamsOnChange}
         />
       )}
       {shownOptions == _WAITING && <WaitingForPlayers />}
@@ -208,7 +239,7 @@ export default function CreateGame() {
           words={words}
           teamNames={teamNames}
           shownOptionsOnChange={shownOptionsOnChange}
-          teamNamesOnChange={teamNamesOnChange}
+          teamNameOnChange={teamNameOnChange}
         />
       )}
       {shownOptions == _HOME && <Home />}

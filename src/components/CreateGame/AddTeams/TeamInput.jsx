@@ -1,16 +1,26 @@
 import { useEffect, useState } from "react";
+import { styled } from "styled-components";
 
-export default function PlayerInput({
-  teamNum,
-  className,
-  readOnly,
-  teamNamesOnChange,
-}) {
-  const [input, setInput] = useState(`team${teamNum}`);
+const Input = styled.input`
+  width: 75%;
+  margin: 0.5rem auto;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid white;
+  color: white;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  outline: none;
+  padding-bottom: 0.5rem;
+  font-family: inherit;
+`;
+export default function TeamInput({ teamNum, teamNameOnChange }) {
+  const [input, setInput] = useState(`Team ${teamNum}`);
 
   useEffect(() => {
     const timeOutId = setTimeout(
-      () => teamNamesOnChange(teamNum - 1, `team${teamNum}`, input),
+      () => teamNameOnChange(teamNum - 1, input),
       500
     );
 
@@ -18,11 +28,9 @@ export default function PlayerInput({
   }, [input]);
 
   return (
-    <input
+    <Input
       type="text"
-      readOnly={readOnly}
       value={input}
-      className={className}
       onChange={(e) => setInput(e.target.value)}
     />
   );
