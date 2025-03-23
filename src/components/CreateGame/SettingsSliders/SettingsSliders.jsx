@@ -76,7 +76,7 @@ export default function SettingsSliders({
   return (
     <Container backgroundImage={img}>
       <Title>Settings</Title>
-      <SliderArea>
+      <SliderArea id="round-length-area">
         <h2>Round Length</h2>
         <CustomSlider
           width="60%"
@@ -92,7 +92,7 @@ export default function SettingsSliders({
         </SliderInformation>
       </SliderArea>
 
-      <SliderArea>
+      <SliderArea id="words-amount-area">
         <h2>Words Amount</h2>
         <CustomSlider
           width="60%"
