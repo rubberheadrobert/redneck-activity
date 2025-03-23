@@ -49,6 +49,6 @@ const ToggleContainerComp = styled.div`
   }
 `;
 
-export default function ToggleContainer({ children }) {
-  return <ToggleContainerComp>{children}</ToggleContainerComp>;
+export default function ToggleContainer({ children, id}) {
+  return <ToggleContainerComp id={id}>{children}</ToggleContainerComp>;
 }
