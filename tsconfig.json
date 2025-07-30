@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+      "allowJs": true,
+      "checkJs": true,
+      "jsx": "react-jsx",
+      "isolatedModules": true,
+      "noEmit": true,
+      "strict": true
+    },
+    "include": ["src/unit-tests"]
+  }

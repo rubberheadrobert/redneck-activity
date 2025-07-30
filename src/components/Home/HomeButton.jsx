@@ -28,6 +28,10 @@ const HomeOption = styled.button`
   }
 `;
 
+/**
+ * @param {{ text: string, faIcon: any }} props
+ */
+
 export default function HomeButton({ text, faIcon }) {
   return (
     <HomeOption>
