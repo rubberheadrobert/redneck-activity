@@ -1,5 +1,6 @@
 import { useState } from "react";
-
+import {settingsTexts} from "../../../utils/texts"
+import {ROUTES} from "../../../utils/routes"
 import { styled } from "styled-components";
 import img from "../../../images/background-turquoise-new.png";
 import NextPrevButtons from "../../UI/NextPrevButtons/NextPrevButtons";
@@ -72,8 +73,8 @@ export default function Settings({
 
         <ToggleInformation>
           {teamsRandomized
-            ? "Teams will be selected randomly."
-            : "Teams will be selected by players."}
+            ? settingsTexts.teamsRandomized
+            : settingsTexts.teamsNotRandomized}
         </ToggleInformation>
       </ToggleContainer>
 
@@ -106,14 +107,14 @@ export default function Settings({
         {/* use this when multiphone logic has NOT been implemented yet */}
         <ToggleInformation>
           {isSinglePhone
-            ? "Game will be played with a single phone"
-            : "This feature has not been implemented yet"}
+            ? settingsTexts.singlePhone
+            : settingsTexts.featureNotImplemented}
         </ToggleInformation>
       </ToggleContainer>
 
       <NextPrevButtons
-        prev="home"
-        next="settings-sliders"
+        prev={ROUTES.HOME}
+        next={ROUTES.SETTINGS_SLIDERS}
         buttonOnClick={handleCreateGameSettings}
         isClickable={isSinglePhone}
       />
