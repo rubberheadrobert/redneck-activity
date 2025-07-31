@@ -5,6 +5,8 @@ import img from "../../../images/purple-paper.avif";
 import Container from "../../UI/Container/Container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddWordsModal from "./AddWordsModal";
+import {ROUTES} from "../../../utils/routes"
+import {ADD_WORDS_CONSTS} from "../../../utils/constants"
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -99,7 +101,7 @@ export default function AddWords({
     try {
       setIsLoading(true);
       const response = await fetch(
-        "https://random-word.ryanrk.com/api/en/word/random/?minlength=3&maxlength=11"
+        
       );
       const data = await response.json();
       const word = data[0];
@@ -132,11 +134,11 @@ export default function AddWords({
     wordsOnChange(currentDisplayedWords);
 
     if (isLastPlayer) {
-      let existingWords = JSON.parse(localStorage.getItem("words")) || [];
+      let existingWords = JSON.parse(localStorage.getItem(ADD_WORDS_CONSTS.WORDS)) || [];
 
       existingWords.push(currentDisplayedWords);
       let mergedWords = existingWords.concat(currentDisplayedWords);
-      localStorage.setItem("words", JSON.stringify(mergedWords));
+      localStorage.setItem(ADD_WORDS_CONSTS.WORDS, JSON.stringify(mergedWords));
       handleCreateGameSettings(event);
       return;
     }
@@ -185,8 +187,8 @@ export default function AddWords({
         </button>
       </ButtonContainer>
       <NextPrevButtons
-        prev="players"
-        next="teams"
+        prev={ROUTES.PLAYERS}
+        next={ROUTES.TEAMS}
         buttonOnClick={handleCreateGameSettings}
       />
       {!canAddWords && (

@@ -3,6 +3,9 @@ import { styled } from "styled-components";
 import { useRef, useState } from "react";
 import Team from "./Team/Team";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {addTeamsTexts} from "../../../utils/texts"
+import {ROUTES} from "../../../utils/routes"
+import {ADD_TEAMS_CONSTS} from "../../../utils/constants"
 
 const TeamsContent = styled.div`
   display: flex;
@@ -80,11 +83,8 @@ export default function AddTeams({
   };
 
   function generatePlayersInTeams() {
-    console.log("generating players in teams");
-    console.log(playersArray);
-    console.log(teamNames);
     const teams = [];
-    let teamIndex = 0; // Start at 0 for array indexing
+    let teamIndex = 0; 
 
     for (let index = 0; index < playersArray.length; index++) {
       console.log(teamIndex);
@@ -96,32 +96,27 @@ export default function AddTeams({
         teamIndex++;
       }
 
-      player["name"] = playersArray[index]["name"];
-      player["teamIndex"] = teamIndex; // Store index instead of name
+      player[ADD_TEAMS_CONSTS.NAME] = playersArray[index][ADD_TEAMS_CONSTS.NAME];
+      player[ADD_TEAMS_CONSTS.teamIndex] = teamIndex; 
 
       teams.push(player);
     }
-
-    console.log("teams:", teams);
     return teams;
   }
   
 
   function generateTeams() {
-    console.log("generating teams");
+    
     const playersInTeams = generatePlayersInTeams();
-    console.log("playersInTeams", playersInTeams);
-    console.log("teamNames", teamNames);
+    
     const teams = [];
 
     for (let i = 0; i < numOfTeams; i++) {
-      console.log("in first for loop");
-      const team = { team: teamNames[i].name, players: [] }; // Use .name directly
-      console.log("team: ", team);
+      const team = { team: teamNames[i].name, players: [] }; 
 
       for (let j = 0; j < playersInTeams.length; j++) {
-        if (playersInTeams[j]["teamIndex"] === i) {
-          // Compare by index
+        if (playersInTeams[j][ADD_TEAMS_CONSTS.TEAM_INDEX] === i) {
+          
           team.players.push(playersInTeams[j]);
         }
       }
@@ -129,7 +124,7 @@ export default function AddTeams({
       }
 
     playersInTeamsOnChange(teams);
-    console.log("teams", teams);
+   
     return teams;
   }
 
@@ -164,8 +159,8 @@ export default function AddTeams({
         </StyledNextButton>
       </TeamsContent>
       <NextPrevButtons
-        prev="words"
-        next="game"
+        prev={ROUTES.WORDS}
+        next={ROUTES.GAME}
         buttonOnClick={handleCreateGameSettings}
       />
     </Container>

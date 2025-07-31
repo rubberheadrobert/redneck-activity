@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { styled } from "styled-components";
 
+import {addPlayersTexts} from "../../../utils/texts"
+import {ROUTES} from "../../../utils/routes"
 import PlayerInput from "./PlayerInput/PlayerInput";
 import NextPrevButtons from "../../UI/NextPrevButtons/NextPrevButtons";
 import img from "../../../images/purple-paper.avif";
@@ -218,7 +220,7 @@ export default function AddPlayers({
             type="text"
             value={numOfPlayers}
             onChange={(e) => setNumOfPlayers(e.target.value)}
-            placeholder="number of players"
+            placeholder={addPlayersTexts.numOfPlayers}
           />
         </div>
 
@@ -230,7 +232,7 @@ export default function AddPlayers({
               numOfTeamsOnChange(e.target.value);
             }}
             value={numOfTeams}
-            placeholder="Number of teams..."
+            placeholder={addPlayersTexts.numOfTeams}
           />
         </div>
       </InputContainer>
@@ -239,8 +241,8 @@ export default function AddPlayers({
         {inputs}
       </PlayerInputContainer>
       <NextPrevButtons
-        prev="settings-sliders"
-        next="words"
+        prev={ROUTES.SETTINGS_SLIDERS}
+        next={ROUTES.WORDS}
         buttonOnClick={handleCreateGameSettings}
       />
     </Container>
