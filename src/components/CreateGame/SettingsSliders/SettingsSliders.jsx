@@ -6,6 +6,8 @@ import NextPrevButtons from "../../UI/NextPrevButtons/NextPrevButtons";
 import Container from "../../UI/Container/Container";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import {ROUTES} from "../../../utils/routes"
+import {SETTINGS_SLIDERS_CONSTS} from "../../../utils/constants"
 
 const Title = styled.h1`
   display: inline-block;
@@ -53,12 +55,12 @@ export default function SettingsSliders({
 }) {
   useEffect(() => {
     // load roundLength from localStorage
-    const savedRoundLength = localStorage.getItem("roundLength");
+    const savedRoundLength = localStorage.getItem(SETTINGS_SLIDERS_CONSTS.ROUND_LENGTH);
     if (savedRoundLength) {
       secondsRoundOnChange(parseInt(savedRoundLength));
     }
     // load wordsAmount from localStorage
-    const savedWordsAmount = localStorage.getItem("wordsAmount");
+    const savedWordsAmount = localStorage.getItem(SETTINGS_SLIDERS_CONSTS.WORDS_AMOUNT);
     if (savedWordsAmount) {
       wordsAmountOnChange(parseInt(savedWordsAmount));
     }
@@ -66,12 +68,12 @@ export default function SettingsSliders({
 
   useEffect(() => {
     // save roundLength to localStorage
-    localStorage.setItem("roundLength", secondsRound);
+    localStorage.setItem(SETTINGS_SLIDERS_CONSTS.ROUND_LENGTH, secondsRound);
   }, [secondsRound]);
 
   useEffect(() => {
     // save wordsAmount to localStorage
-    localStorage.setItem("wordsAmount", wordsAmount);
+    localStorage.setItem(SETTINGS_SLIDERS_CONSTS.WORDS_AMOUNT, wordsAmount);
   }, [wordsAmount]);
   return (
     <Container backgroundImage={img}>
@@ -108,8 +110,8 @@ export default function SettingsSliders({
       </SliderArea>
 
       <NextPrevButtons
-        prev="settings"
-        next="players"
+        prev={ROUTES.SETTINGS}
+        next={ROUTES.PLAYERS}
         buttonOnClick={handleCreateGameSettings}
       />
     </Container>

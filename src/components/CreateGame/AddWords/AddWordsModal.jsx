@@ -1,6 +1,7 @@
 import React from "react";
 import { styled } from "styled-components";
 import WordInput from "./WordInput";
+import {ADD_WORDS_CONSTS} from "../../../utils/constants"
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
@@ -69,7 +70,7 @@ export default function AddWordsModal({
         <ModalComp>
           <h2>Double check the words you added!</h2>
           {inputs}
-          <Close onClick={onClose} name="teams">
+          <Close onClick={onClose} name={ADD_WORDS_CONSTS.TEAMS}>
             Next Player
           </Close>
         </ModalComp>
