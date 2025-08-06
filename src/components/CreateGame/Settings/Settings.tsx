@@ -11,6 +11,11 @@ const lightGreen = "#00cc99"; // rgb(0, 204, 153)
 const darkOrange = "#ff9900";
 // lightOrange = rgb(255, 204, 102)
 
+
+interface ContainerCompProps {
+  selected?: boolean;
+
+}
 const Title = styled.h1`
   display: inline-block;
   margin: 0.5rem auto;
@@ -20,14 +25,14 @@ const Title = styled.h1`
   color: whitesmoke;
 `;
 
-const TeamsToggleButton = styled.button`
+const TeamsToggleButton = styled.button<ContainerCompProps>`
   background-color: ${({ selected, name }) =>
     selected && name == "teams-random" && "#ffcc66"} !important;
   background-color: ${({ selected, name }) =>
     !selected && name == "teams-nonrandom" && "#ffcc66"} !important;
 `;
 
-const GamesToggleButton = styled.button`
+const GamesToggleButton = styled.button<ContainerCompProps>`
   background-color: ${({ selected, name }) =>
     selected && name == "single-phone" && "#ffcc66"} !important;
   background-color: ${({ selected, name }) =>
@@ -42,17 +47,25 @@ const ToggleInformation = styled.p`
   padding: 0.5rem 1rem;
 `;
 
+
+interface SettingsProps {
+  teamsRandomized: boolean;
+  teamsRandomizedOnChange: (value: boolean) => void;
+  isSinglePhone: boolean;
+  isSinglePhoneOnChange: (value: boolean) => void;
+  handleCreateGameSettings: (event: React.FormEvent | React.MouseEvent) => void;
+}
 export default function Settings({
   teamsRandomized,
   teamsRandomizedOnChange,
   isSinglePhone,
   isSinglePhoneOnChange,
   handleCreateGameSettings,
-}) {
+}: SettingsProps) {
   return (
-    <Container backgroundImage={img}>
+    <Container secondColor="" backgroundImage={img} >
       <Title>Settings</Title>
-      <ToggleContainer>
+      <ToggleContainer id="teams-random-container">
         <h2>Teams</h2>
         <section>
           <TeamsToggleButton
@@ -78,7 +91,7 @@ export default function Settings({
         </ToggleInformation>
       </ToggleContainer>
 
-      <ToggleContainer>
+      <ToggleContainer id="game-type-container">
         <h2>Game Type</h2>
         <section>
           <GamesToggleButton

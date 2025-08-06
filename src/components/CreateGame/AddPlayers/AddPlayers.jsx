@@ -6,7 +6,7 @@ import {ROUTES} from "../../../utils/routes"
 import PlayerInput from "./PlayerInput/PlayerInput";
 import NextPrevButtons from "../../UI/NextPrevButtons/NextPrevButtons";
 import img from "../../../images/purple-paper.avif";
-import Container from "../..//UI/Container/Container.jsx";
+import Container from "../../UI/Container/Container.tsx";
 
 const InputContainer = styled.div`
   display: flex;

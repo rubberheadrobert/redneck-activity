@@ -10,7 +10,7 @@ const Input = styled.input`
   align-self: center;
 `;
 
-export default function WordInput({ index, wordsEditOnChange, word }) {
+export default function WordInput({ index, name, wordsEditOnChange, word }) {
   const [input, setInput] = useState(word);
 
   useEffect(() => {

@@ -8,9 +8,8 @@ import Game from "../Game/Game";
 import AddWords from "./AddWords/AddWords";
 import Home from "../Home/Home";
 import SettingsSliders from "./SettingsSliders/SettingsSliders";
-import CreateGameModal from "./CreateGameModule";
-
-import { BrowserRouter, Route, Link, NavLink } from "react-router-dom";
+import CreateGameModal from "./CreateGameModal";
+import {Player, TeamName, Team, PlayerInTeam, PlayersInTeam} from "../../types/index"
 
 const _HOME = "home";
 const _TEAMS = "teams";
@@ -22,22 +21,24 @@ const _GAME = "game";
 const _WORDS = "words";
 
 export default function CreateGame() {
+
   //players -- settings -- teams
-  const [shownOptions, setShownOptions] = useState(_SETTINGS);
+  const [shownOptions, setShownOptions] = useState<string>(_SETTINGS);
   const [game, setGame] = useState({});
   const [teamsRandomized, setTeamsRandomized] = useState(true);
   const [isSinglePhone, setIsSinglePhone] = useState(true);
   const [secondsRound, setSecondsRound] = useState(30);
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [numOfTeams, setNumOfTeams] = useState(2);
-  const [words, setWords] = useState([]);
-  const [wordsAmount, setWordsAmount] = useState(5);
-  const [teamNames, setTeamNames] = useState([]);
-  const [showCreateGameModal, setShowCreateGameModal] = useState(
+  const [words, setWords] = useState<string[]>([]);
+  const [wordsAmount, setWordsAmount] = useState<number>(5);
+  const [teamNames, setTeamNames] = useState<TeamName[]>([]);
+  const [showCreateGameModal, setShowCreateGameModal] = useState<boolean>(
     hasLocalStorage()
   );
+  
 
-  const [playersInTeams, setPlayersInTeams] = useState([]);
+  const [playersInTeams, setPlayersInTeams] = useState<PlayersInTeam[]>([]);
 
   //states for Settings
 
@@ -45,7 +46,7 @@ export default function CreateGame() {
     const website = "https://codesandbox.io";
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key.startsWith(website)) {
+      if (key && key.startsWith(website)) {
         console.log("return true");
         return true;
       }
@@ -54,7 +55,7 @@ export default function CreateGame() {
     return false;
   }
 
-  function handleCreateGameSettings(event) {
+  function handleCreateGameSettings(event: any) : void {
     console.log(event.target.name);
     if (event.target.name === _HOME) {
       setShownOptions(_HOME);
@@ -89,7 +90,7 @@ export default function CreateGame() {
     setSecondsRound(newValue);
   }
 
-  function shownOptionsOnChange(newPage) {
+  function shownOptionsOnChange(newPage:string) {
     setShownOptions(newPage);
 
     console.log("in playersInTeamOnChange");
@@ -102,7 +103,7 @@ export default function CreateGame() {
     console.log(newPlayers);
   }
 
-  function teamNameOnChange(index, name) {
+  function teamNameOnChange(index: number, name: string) {
     console.log("index: ", index);
     console.log("name: ", name);
     console.log("teamNames: ", teamNames);
@@ -112,7 +113,13 @@ export default function CreateGame() {
         const newArray = [...prevArray];
         console.log("teamNameOnChange newArray", newArray);
         console.log("teamNameOnChange name" + name);
-        newArray[index]["name"] = name;
+        if (newArray[index]) {
+          newArray[index] = { ...newArray[index], name };
+        }
+        // if(newArray[index]){
+        //     newArray[index]["name"] = name;
+        // }
+        
         console.log(newArray);
         return newArray;
       });
@@ -123,7 +130,7 @@ export default function CreateGame() {
 
   function numOfTeamsOnChange(num) {
     setNumOfTeams(num);
-    const teamNames = [];
+    const teamNames: Team[] = [];
     for (let i = 0; i < num; i++) {
       const teamName = `Team ${i + 1}`;
       teamNames.push({ oldName: teamName, name: teamName });
@@ -132,9 +139,18 @@ export default function CreateGame() {
     setTeamNames(teamNames);
   }
 
-  function playersOnChange(index, newName) {
+  // function playersOnChange(index, newName) {
+  //   setPlayers((prevArray) => {
+  //     const newArray = [...prevArray];
+  //     newArray[index] = { ...newArray[index], name: newName };
+  //     return newArray;
+  //   });
+  // }
+
+  function playersOnChange(index: number, newName: string) {
     setPlayers((prevArray) => {
-      const newArray = [...prevArray];
+      if (index < 0 || index >= prevArray.length) return prevArray; // Prevent out-of-bounds
+      const newArray: Player[]= [...prevArray];
       newArray[index] = { ...newArray[index], name: newName };
       return newArray;
     });
@@ -159,18 +175,18 @@ export default function CreateGame() {
     setWords((prevWords) => prevWords.concat(newWords));
   }
 
-  function wordsAmountOnChange(num) {
+  function wordsAmountOnChange(num: number) {
     setWordsAmount(num);
   }
 
-  function showCreateGameModalOnChange(bool) {
+  function showCreateGameModalOnChange(bool: boolean) {
     setShowCreateGameModal(bool);
   }
 
-  function playersInTeamsOnChange(arr) {
+  function playersInTeamsOnChange(arr: PlayersInTeam[]) {
     console.log("in playersInTeamsOnChange");
 
-    playersInTeams.current = arr;
+    setPlayersInTeams(arr);
   }
 
   return (
@@ -178,7 +194,6 @@ export default function CreateGame() {
       {shownOptions == _SETTINGS && (
         <Settings
           handleCreateGameSettings={handleCreateGameSettings}
-          game={game}
           isSinglePhone={isSinglePhone}
           teamsRandomized={teamsRandomized}
           teamsRandomizedOnChange={teamsRandomizedOnChange}
@@ -232,7 +247,7 @@ export default function CreateGame() {
       )}
       {shownOptions == _WAITING && <WaitingForPlayers />}
 
-      {shownOptions == _GAME && (
+      {/* {shownOptions == _GAME && (
         <Game
           players={players}
           secondsRound={secondsRound}
@@ -241,7 +256,7 @@ export default function CreateGame() {
           shownOptionsOnChange={shownOptionsOnChange}
           teamNameOnChange={teamNameOnChange}
         />
-      )}
+      )} */}
       {shownOptions == _HOME && <Home />}
       {showCreateGameModal && (
         <CreateGameModal

@@ -41,6 +41,13 @@ const ModalComp = styled.div`
   }
 `;
 
+interface AddWordsModalProps {
+  onClose: () => void;
+  currentWords: string[];
+  showWordsModal: boolean;
+  wordsEditOnChange: (index: number, newWord: string) => void;
+}
+
 const Close = styled.button``;
 
 export default function AddWordsModal({
@@ -48,11 +55,10 @@ export default function AddWordsModal({
   currentWords,
   showWordsModal,
   wordsEditOnChange,
-}) {
+}: AddWordsModalProps) {
   const inputs = currentWords.map((word, index) => {
     return (
       <WordInput
-        type="text"
         key={index}
         name={`word${index + 1}`}
         index={index}

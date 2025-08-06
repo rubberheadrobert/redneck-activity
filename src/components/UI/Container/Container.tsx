@@ -1,6 +1,10 @@
 import { styled } from "styled-components";
+import { ReactNode } from 'react';
+import {ContainerCompProps, ContainerProps} from "../../../types/index"
 
-const ContainerComp = styled.div`
+
+
+const ContainerComp = styled.div<ContainerCompProps>`
   align-items: center;
   color: whitesmoke;
   display: flex;
@@ -14,8 +18,9 @@ const ContainerComp = styled.div`
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: ${(props) =>
-    props.backgroundImage && `url(${props.backgroundImage})`};
+  background-image: background-image: ${(props) =>
+    props.backgroundImage ? `url(${props.backgroundImage})` : 'none'};
+
 
   > div {
     width: 80%;
@@ -61,7 +66,9 @@ const ContainerComp = styled.div`
   }
 `;
 
-export default function Container({ children, backgroundImage, secondColor }) {
+
+
+export default function Container({ children, backgroundImage, secondColor } : ContainerProps) {
   return (
     <ContainerComp backgroundImage={backgroundImage} secondColor={secondColor}>
       {children}

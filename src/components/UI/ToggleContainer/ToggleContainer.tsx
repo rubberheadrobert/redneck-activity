@@ -1,4 +1,6 @@
+import { ReactNode } from "react";
 import { styled } from "styled-components";
+import {ToggleContainerProps} from "../../../types/index"
 
 const ToggleContainerComp = styled.div`
   background-color: rgb(0, 204, 153, 0.8);
@@ -49,6 +51,6 @@ const ToggleContainerComp = styled.div`
   }
 `;
 
-export default function ToggleContainer({ children, id}) {
+export default function ToggleContainer({ children, id}:ToggleContainerProps) {
   return <ToggleContainerComp id={id}>{children}</ToggleContainerComp>;
 }

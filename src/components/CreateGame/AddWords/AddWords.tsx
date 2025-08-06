@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddWordsModal from "./AddWordsModal";
 import {ROUTES} from "../../../utils/routes"
 import {ADD_WORDS_CONSTS} from "../../../utils/constants"
+import {AddWordsProps, Player} from "../../../types/index"
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -75,13 +76,13 @@ export default function AddWords({
   handleCreateGameSettings,
   wordsOnChange,
   wordsEditOnChange,
-}) {
-  const [currentWord, setCurrentWord] = useState("");
-  const [currentDisplayedWords, setCurrentDisplayedWords] = useState([]);
-  const [canAddWords, setCanAddWords] = useState(true);
-  const [currentWordsLeft, setCurrentWordsLeft] = useState(wordsAmount);
-  const [isLastPlayer, setIsLastPlayer] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+}: AddWordsProps) {
+  const [currentWord, setCurrentWord] = useState<string>("");
+  const [currentDisplayedWords, setCurrentDisplayedWords] = useState<string[]>([]);
+  const [canAddWords, setCanAddWords] = useState<boolean>(true);
+  const [currentWordsLeft, setCurrentWordsLeft] = useState<number>(wordsAmount);
+  const [isLastPlayer, setIsLastPlayer] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const currentPlayer = useRef(1);
   const currentWordIndex = useRef(0);
@@ -101,7 +102,7 @@ export default function AddWords({
     try {
       setIsLoading(true);
       const response = await fetch(
-        
+        "https://random-word-api.herokuapp.com/word"
       );
       const data = await response.json();
       const word = data[0];
@@ -130,11 +131,12 @@ export default function AddWords({
     currentWordIndex.current = currentWordIndex.current + 1;
   }
 
-  function handleNextPlayer(event) {
+  function handleNextPlayer(event:any) {
     wordsOnChange(currentDisplayedWords);
 
     if (isLastPlayer) {
-      let existingWords = JSON.parse(localStorage.getItem(ADD_WORDS_CONSTS.WORDS)) || [];
+      const storedValue = localStorage.getItem(ADD_WORDS_CONSTS.WORDS);
+      let existingWords = storedValue ? JSON.parse(storedValue) : [];
 
       existingWords.push(currentDisplayedWords);
       let mergedWords = existingWords.concat(currentDisplayedWords);
@@ -166,7 +168,7 @@ export default function AddWords({
         <CurrentWordInput
           type="text"
           value={currentWord}
-          onChange={(e) => setCurrentWord(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentWord(e.target.value)}
           placeholder
           disabled={isLoading}
         />
