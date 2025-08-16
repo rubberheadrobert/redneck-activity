@@ -1,74 +1,79 @@
-import { useState } from "react";
-import Settings from "./Settings/Settings";
-import AddPlayers from "./AddPlayers/AddPlayers";
-import AddTeams from "./AddTeams/AddTeams";
-import "./CreateGame.css";
-import WaitingForPlayers from "./WaitingForPlayers/WaitingForPlayers";
-import Game from "../Game/Game";
-import AddWords from "./AddWords/AddWords";
-import Home from "../Home/Home";
-import SettingsSliders from "./SettingsSliders/SettingsSliders";
-import CreateGameModal from "./CreateGameModule";
+import { useState } from 'react';
+import Settings from './Settings/Settings';
+import AddPlayers from './AddPlayers/AddPlayers';
+import AddTeams from './AddTeams/AddTeams';
+import './CreateGame.css';
+import WaitingForPlayers from './WaitingForPlayers/WaitingForPlayers';
+import Game from '../Game/Game';
+import AddWords from './AddWords/AddWords';
+import Home from '../Home/Home';
+import SettingsSliders from './SettingsSliders/SettingsSliders';
+import CreateGameModal from './CreateGameModal';
+import {
+  Player,
+  TeamName,
+  Team,
+  PlayerInTeam,
+  PlayersInTeam,
+} from '../../types/index';
 
-import { BrowserRouter, Route, Link, NavLink } from "react-router-dom";
-
-const _HOME = "home";
-const _TEAMS = "teams";
-const _PLAYERS = "players";
-const _SETTINGS = "settings";
-const _SETTINGS_SLIDERS = "settings-sliders";
-const _WAITING = "waiting";
-const _GAME = "game";
-const _WORDS = "words";
+const _HOME = 'home';
+const _TEAMS = 'teams';
+const _PLAYERS = 'players';
+const _SETTINGS = 'settings';
+const _SETTINGS_SLIDERS = 'settings-sliders';
+const _WAITING = 'waiting';
+const _GAME = 'game';
+const _WORDS = 'words';
 
 export default function CreateGame() {
   //players -- settings -- teams
-  const [shownOptions, setShownOptions] = useState(_SETTINGS);
+  const [shownOptions, setShownOptions] = useState<string>(_SETTINGS);
   const [game, setGame] = useState({});
-  const [teamsRandomized, setTeamsRandomized] = useState(true);
-  const [isSinglePhone, setIsSinglePhone] = useState(true);
-  const [secondsRound, setSecondsRound] = useState(30);
-  const [players, setPlayers] = useState([]);
-  const [numOfTeams, setNumOfTeams] = useState(2);
-  const [words, setWords] = useState([]);
-  const [wordsAmount, setWordsAmount] = useState(5);
-  const [teamNames, setTeamNames] = useState([]);
-  const [showCreateGameModal, setShowCreateGameModal] = useState(
+  const [teamsRandomized, setTeamsRandomized] = useState<boolean>(true);
+  const [isSinglePhone, setIsSinglePhone] = useState<boolean>(true);
+  const [secondsRound, setSecondsRound] = useState<number>(30);
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [numOfTeams, setNumOfTeams] = useState<number>(2);
+  const [words, setWords] = useState<string[]>([]);
+  const [wordsAmount, setWordsAmount] = useState<number>(5);
+  const [teamNames, setTeamNames] = useState<TeamName[]>([]);
+  const [showCreateGameModal, setShowCreateGameModal] = useState<boolean>(
     hasLocalStorage()
   );
 
-  const [playersInTeams, setPlayersInTeams] = useState([]);
+  const [playersInTeams, setPlayersInTeams] = useState<PlayersInTeam[]>([]);
 
   //states for Settings
 
   function hasLocalStorage() {
-    const website = "https://codesandbox.io";
+    const website = 'https://codesandbox.io';
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key.startsWith(website)) {
-        console.log("return true");
+      if (key && key.startsWith(website)) {
+        console.log('return true');
         return true;
       }
     }
-    console.log("return false");
+    console.log('return false');
     return false;
   }
 
-  function handleCreateGameSettings(event) {
+  function handleCreateGameSettings(event: any): void {
     console.log(event.target.name);
     if (event.target.name === _HOME) {
       setShownOptions(_HOME);
     } else if (event.target.name === _SETTINGS) {
       setShownOptions(_SETTINGS);
     } else if (event.target.name === _PLAYERS) {
-      console.log("secondsRound", secondsRound);
-      console.log("wordsAmount", wordsAmount);
+      console.log('secondsRound', secondsRound);
+      console.log('wordsAmount', wordsAmount);
       setShownOptions(_PLAYERS);
     } else if (event.target.name === _WORDS) {
-      console.log("players", players);
+      console.log('players', players);
       setShownOptions(_WORDS);
     } else if (event.target.name === _TEAMS) {
-      console.log("numofteams", numOfTeams);
+      console.log('numofteams', numOfTeams);
       setShownOptions(_TEAMS);
     } else if (event.target.name === _GAME) {
       setShownOptions(_GAME);
@@ -77,70 +82,86 @@ export default function CreateGame() {
     }
   }
 
-  function teamsRandomizedOnChange(bool) {
+  function teamsRandomizedOnChange(bool: boolean) {
     setTeamsRandomized(bool);
   }
 
-  function isSinglePhoneOnChange(bool) {
+  function isSinglePhoneOnChange(bool: boolean) {
     setIsSinglePhone(bool);
   }
 
-  function secondsRoundOnChange(newValue) {
+  function secondsRoundOnChange(newValue: number) {
     setSecondsRound(newValue);
   }
 
-  function shownOptionsOnChange(newPage) {
+  function shownOptionsOnChange(newPage: string) {
     setShownOptions(newPage);
 
-    console.log("in playersInTeamOnChange");
+    console.log('in playersInTeamOnChange');
     console.log(playersInTeams);
   }
 
-  function playersAllOnChange(newPlayers) {
-    console.log("in playersAllOnChange");
+  function playersAllOnChange(newPlayers: Player[]) {
+    console.log('in playersAllOnChange');
     setPlayers(newPlayers);
     console.log(newPlayers);
   }
 
-  function teamNameOnChange(index, name) {
-    console.log("index: ", index);
-    console.log("name: ", name);
-    console.log("teamNames: ", teamNames);
+  function teamNameOnChange(index: number, name: string) {
+    console.log('index: ', index);
+    console.log('name: ', name);
+    console.log('teamNames: ', teamNames);
 
     if (arguments.length === 2) {
       setTeamNames((prevArray) => {
         const newArray = [...prevArray];
-        console.log("teamNameOnChange newArray", newArray);
-        console.log("teamNameOnChange name" + name);
-        newArray[index]["name"] = name;
+        console.log('teamNameOnChange newArray', newArray);
+        console.log('teamNameOnChange name' + name);
+        if (newArray[index]) {
+          newArray[index] = { ...newArray[index], name };
+        }
+        // if(newArray[index]){
+        //     newArray[index]["name"] = name;
+        // }
+
         console.log(newArray);
         return newArray;
       });
     } else if (arguments.length === 1) {
     }
-  
   }
 
-  function numOfTeamsOnChange(num) {
+  function numOfTeamsOnChange(num: number) {
     setNumOfTeams(num);
-    const teamNames = [];
+    const teamNames: Team[] = [];
     for (let i = 0; i < num; i++) {
       const teamName = `Team ${i + 1}`;
       teamNames.push({ oldName: teamName, name: teamName });
     }
-    console.log("numOfTeamsOnChange:", teamNames);
+    console.log('numOfTeamsOnChange:', teamNames);
     setTeamNames(teamNames);
   }
 
-  function playersOnChange(index, newName) {
+  // function playersOnChange(index, newName) {
+  //   setPlayers((prevArray) => {
+  //     const newArray = [...prevArray];
+  //     newArray[index] = { ...newArray[index], name: newName };
+  //     return newArray;
+  //   });
+  // }
+
+  function playersOnChange(index: number, newName: string) {
     setPlayers((prevArray) => {
-      const newArray = [...prevArray];
+      if (index < 0 || index >= prevArray.length) return prevArray; // Prevent out-of-bounds
+      const newArray: Player[] = [...prevArray];
       newArray[index] = { ...newArray[index], name: newName };
+      console.log('Players:');
+      console.log(players);
       return newArray;
     });
   }
 
-  function wordsEditOnChange(index, newWord) {
+  function wordsEditOnChange(index: number, newWord: string) {
     setWords((prevArray) => {
       const newArray = [...prevArray];
       newArray[index] = newWord;
@@ -150,35 +171,33 @@ export default function CreateGame() {
     console.log(words);
   }
 
-  
-  function playersLengthOnChange(newLength) {
-    setPlayers(new Array(Number(newLength)).fill({ name: "" }));
+  function playersLengthOnChange(newLength: number) {
+    setPlayers(new Array(Number(newLength)).fill({ name: '' }));
   }
 
-  function wordsOnChange(newWords) {
+  function wordsOnChange(newWords: string[]) {
     setWords((prevWords) => prevWords.concat(newWords));
   }
 
-  function wordsAmountOnChange(num) {
+  function wordsAmountOnChange(num: number) {
     setWordsAmount(num);
   }
 
-  function showCreateGameModalOnChange(bool) {
+  function showCreateGameModalOnChange(bool: boolean) {
     setShowCreateGameModal(bool);
   }
 
-  function playersInTeamsOnChange(arr) {
-    console.log("in playersInTeamsOnChange");
+  function playersInTeamsOnChange(arr: PlayersInTeam[]) {
+    console.log('in playersInTeamsOnChange');
 
-    playersInTeams.current = arr;
+    setPlayersInTeams(arr);
   }
 
   return (
-    <div className="create-game-container">
+    <div className='create-game-container'>
       {shownOptions == _SETTINGS && (
         <Settings
           handleCreateGameSettings={handleCreateGameSettings}
-          game={game}
           isSinglePhone={isSinglePhone}
           teamsRandomized={teamsRandomized}
           teamsRandomizedOnChange={teamsRandomizedOnChange}
@@ -204,7 +223,6 @@ export default function CreateGame() {
           players={players}
           wordsEditOnChange={wordsEditOnChange}
           playersLengthOnChange={playersLengthOnChange}
-
         />
       )}
       {shownOptions == _PLAYERS && (
@@ -214,7 +232,7 @@ export default function CreateGame() {
           numOfTeams={numOfTeams}
           numOfTeamsOnChange={numOfTeamsOnChange}
           playersOnChange={playersOnChange}
-          playersAllOnChange={playersAllOnChange}
+          // playersAllOnChange={playersAllOnChange}
           playersLengthOnChange={playersLengthOnChange}
         />
       )}
@@ -232,7 +250,7 @@ export default function CreateGame() {
       )}
       {shownOptions == _WAITING && <WaitingForPlayers />}
 
-      {shownOptions == _GAME && (
+      {/* {shownOptions == _GAME && (
         <Game
           players={players}
           secondsRound={secondsRound}
@@ -241,7 +259,7 @@ export default function CreateGame() {
           shownOptionsOnChange={shownOptionsOnChange}
           teamNameOnChange={teamNameOnChange}
         />
-      )}
+      )} */}
       {shownOptions == _HOME && <Home />}
       {showCreateGameModal && (
         <CreateGameModal

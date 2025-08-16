@@ -1,16 +1,20 @@
-import { useState } from "react";
-import {settingsTexts} from "../../../utils/texts"
-import {ROUTES} from "../../../utils/routes"
-import { styled } from "styled-components";
-import img from "../../../images/background-turquoise-new.png";
-import NextPrevButtons from "../../UI/NextPrevButtons/NextPrevButtons";
-import Container from "../../UI/Container/Container";
-import ToggleContainer from "../../UI/ToggleContainer/ToggleContainer";
-const darkGreen = "#00b386";
-const lightGreen = "#00cc99"; // rgb(0, 204, 153)
-const darkOrange = "#ff9900";
+import { useState } from 'react';
+import { settingsTexts } from '../../../utils/texts';
+import { ROUTES } from '../../../utils/routes';
+import { styled } from 'styled-components';
+import img from '../../../images/background-turquoise-new.png';
+import NextPrevButtons from '../../UI/NextPrevButtons/NextPrevButtons';
+import Container from '../../UI/Container/Container';
+import ToggleContainer from '../../UI/ToggleContainer/ToggleContainer';
+import { SettingsProps } from '../../../types/index';
+const darkGreen = '#00b386';
+const lightGreen = '#00cc99'; // rgb(0, 204, 153)
+const darkOrange = '#ff9900';
 // lightOrange = rgb(255, 204, 102)
 
+interface ContainerCompProps {
+  selected?: boolean;
+}
 const Title = styled.h1`
   display: inline-block;
   margin: 0.5rem auto;
@@ -20,18 +24,18 @@ const Title = styled.h1`
   color: whitesmoke;
 `;
 
-const TeamsToggleButton = styled.button`
+const TeamsToggleButton = styled.button<ContainerCompProps>`
   background-color: ${({ selected, name }) =>
-    selected && name == "teams-random" && "#ffcc66"} !important;
+    selected && name == 'teams-random' && '#ffcc66'} !important;
   background-color: ${({ selected, name }) =>
-    !selected && name == "teams-nonrandom" && "#ffcc66"} !important;
+    !selected && name == 'teams-nonrandom' && '#ffcc66'} !important;
 `;
 
-const GamesToggleButton = styled.button`
+const GamesToggleButton = styled.button<ContainerCompProps>`
   background-color: ${({ selected, name }) =>
-    selected && name == "single-phone" && "#ffcc66"} !important;
+    selected && name == 'single-phone' && '#ffcc66'} !important;
   background-color: ${({ selected, name }) =>
-    !selected && name == "multiple-phones" && "#ffcc66"} !important;
+    !selected && name == 'multiple-phones' && '#ffcc66'} !important;
 `;
 
 const ToggleInformation = styled.p`
@@ -48,24 +52,28 @@ export default function Settings({
   isSinglePhone,
   isSinglePhoneOnChange,
   handleCreateGameSettings,
-}) {
+}: SettingsProps) {
   return (
-    <Container backgroundImage={img}>
+    <Container secondColor='' backgroundImage={img}>
       <Title>Settings</Title>
-      <ToggleContainer>
+      <ToggleContainer id='teams-random-container'>
         <h2>Teams</h2>
         <section>
           <TeamsToggleButton
             selected={teamsRandomized}
             onClick={() => teamsRandomizedOnChange(true)}
-            name="teams-random"
+            name='teams-random'
+            data-testid={`teams-random-btn`}
+            data-selected={`${teamsRandomized ? true : false}`}
           >
             Random
           </TeamsToggleButton>
           <TeamsToggleButton
             selected={teamsRandomized}
             onClick={() => teamsRandomizedOnChange(false)}
-            name="teams-nonrandom"
+            name='teams-nonrandom'
+            data-testid={`teams-nonrandom-btn`}
+            data-selected={`${teamsRandomized ? false : true}`}
           >
             Non-random
           </TeamsToggleButton>
@@ -78,22 +86,26 @@ export default function Settings({
         </ToggleInformation>
       </ToggleContainer>
 
-      <ToggleContainer>
+      <ToggleContainer id='game-type-container'>
         <h2>Game Type</h2>
         <section>
           <GamesToggleButton
             selected={isSinglePhone}
             onClick={() => isSinglePhoneOnChange(true)}
-            className={`${isSinglePhone ? "selected" : ""}`}
-            name="single-phone"
+            className={`${isSinglePhone ? 'selected' : ''}`}
+            name='single-phone'
+            data-testid={`single-phone-btn`}
+            data-selected={`${isSinglePhone ? true : false}`}
           >
             Single Phone
           </GamesToggleButton>
           <GamesToggleButton
             selected={isSinglePhone}
             onClick={() => isSinglePhoneOnChange(false)}
-            className={`${!isSinglePhone ? "selected" : ""}`}
-            name="multiple-phones"
+            className={`${!isSinglePhone ? true : false}`}
+            name='multiple-phones'
+            data-testid={`multiple-phones-btn`}
+            data-selected={`${!isSinglePhone ? true : false}`}
           >
             Multiple Phones
           </GamesToggleButton>

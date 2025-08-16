@@ -1,12 +1,13 @@
-import { useState, useRef, useEffect } from "react";
-import { styled } from "styled-components";
-import NextPrevButtons from "../../UI/NextPrevButtons/NextPrevButtons";
-import img from "../../../images/purple-paper.avif";
-import Container from "../../UI/Container/Container";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AddWordsModal from "./AddWordsModal";
-import {ROUTES} from "../../../utils/routes"
-import {ADD_WORDS_CONSTS} from "../../../utils/constants"
+import { useState, useRef, useEffect } from 'react';
+import { styled } from 'styled-components';
+import NextPrevButtons from '../../UI/NextPrevButtons/NextPrevButtons';
+import img from '../../../images/purple-paper.avif';
+import Container from '../../UI/Container/Container';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import AddWordsModal from './AddWordsModal';
+import { ROUTES } from '../../../utils/routes';
+import { ADD_WORDS_CONSTS } from '../../../utils/constants';
+import { AddWordsProps } from '../../../types/index';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -75,13 +76,15 @@ export default function AddWords({
   handleCreateGameSettings,
   wordsOnChange,
   wordsEditOnChange,
-}) {
-  const [currentWord, setCurrentWord] = useState("");
-  const [currentDisplayedWords, setCurrentDisplayedWords] = useState([]);
-  const [canAddWords, setCanAddWords] = useState(true);
-  const [currentWordsLeft, setCurrentWordsLeft] = useState(wordsAmount);
-  const [isLastPlayer, setIsLastPlayer] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+}: AddWordsProps) {
+  const [currentWord, setCurrentWord] = useState<string>('');
+  const [currentDisplayedWords, setCurrentDisplayedWords] = useState<string[]>(
+    []
+  );
+  const [canAddWords, setCanAddWords] = useState<boolean>(true);
+  const [currentWordsLeft, setCurrentWordsLeft] = useState<number>(wordsAmount);
+  const [isLastPlayer, setIsLastPlayer] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const currentPlayer = useRef(1);
   const currentWordIndex = useRef(0);
@@ -101,13 +104,13 @@ export default function AddWords({
     try {
       setIsLoading(true);
       const response = await fetch(
-        
+        'https://random-word-api.herokuapp.com/word'
       );
       const data = await response.json();
       const word = data[0];
       setCurrentWord(word);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error);
     }
     setIsLoading(false);
   }
@@ -118,23 +121,24 @@ export default function AddWords({
       newWords[currentWordIndex.current] = currentWord;
       setCurrentDisplayedWords(newWords);
       setCurrentWordsLeft(currentWordsLeft - 1);
-      setCurrentWord("");
+      setCurrentWord('');
     } else if (currentWordIndex.current == maxDisplayedWordIndex.current) {
       const newWords = [...currentDisplayedWords];
       newWords[currentWordIndex.current] = currentWord;
       setCurrentDisplayedWords(newWords);
       setCanAddWords(false);
-      setCurrentWord("");
+      setCurrentWord('');
     }
     setCurrentWordsLeft(currentWordsLeft - 1);
     currentWordIndex.current = currentWordIndex.current + 1;
   }
 
-  function handleNextPlayer(event) {
+  function handleNextPlayer(event: any) {
     wordsOnChange(currentDisplayedWords);
 
     if (isLastPlayer) {
-      let existingWords = JSON.parse(localStorage.getItem(ADD_WORDS_CONSTS.WORDS)) || [];
+      const storedValue = localStorage.getItem(ADD_WORDS_CONSTS.WORDS);
+      let existingWords = storedValue ? JSON.parse(storedValue) : [];
 
       existingWords.push(currentDisplayedWords);
       let mergedWords = existingWords.concat(currentDisplayedWords);
@@ -158,20 +162,22 @@ export default function AddWords({
   });
 
   return (
-    <Container backgroundImage={img} secondColor={"#8236d6"}>
+    <Container backgroundImage={img} secondColor={'#8236d6'}>
       <h1>Add Words</h1>
       <WordArea>
         <h2> {currentPlayerObj.name}</h2>
         <p>please add {currentWordsLeft} more words</p>
         <CurrentWordInput
-          type="text"
+          type='text'
           value={currentWord}
-          onChange={(e) => setCurrentWord(e.target.value)}
-          placeholder
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setCurrentWord(e.target.value)
+          }
+          placeholder=''
           disabled={isLoading}
         />
         <LoadingContainer>
-          {isLoading && <FontAwesomeIcon icon="spinner" spin />}
+          {isLoading && <FontAwesomeIcon icon='spinner' spin />}
         </LoadingContainer>
       </WordArea>
 
@@ -193,9 +199,10 @@ export default function AddWords({
       />
       {!canAddWords && (
         <AddWordsModal
-          currentWords={currentDisplayedWords}
-          wordsEditOnChange={wordsEditOnChange}
           onClose={handleNextPlayer}
+          currentWords={currentDisplayedWords}
+          showWordsModal={!canAddWords}
+          wordsEditOnChange={wordsEditOnChange}
         />
       )}
     </Container>

@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { styled } from "styled-components";
+import {CreateGameModalProps} from "../../types/index"
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -41,22 +42,24 @@ const ModalComp = styled.div`
   }
 `;
 
+
+
 export default function CreateGameModal({
-  onClose,
-  showCreateGameModalOnChange,
-}) {
+  showCreateGameModal,
+  showCreateGameModalOnChange
+}: CreateGameModalProps) {
   function clearLocalStorageForWebsite() {
     const website = "https://5tw9fw.csb.app/";
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key.startsWith(website)) {
+      if (key && key.startsWith(website)) {
         localStorage.removeItem(key);
       }
     }
     showCreateGameModalOnChange(false);
   }
 
-  if (showCreateGameModalOnChange === false) {
+  if (showCreateGameModal === false) {
     return null;
   } else {
     return (
