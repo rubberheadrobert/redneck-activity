@@ -1,6 +1,6 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { styled } from "styled-components";
-import { BrowserRouter, Route, Link, NavLink } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { styled } from 'styled-components';
+import { BrowserRouter, Route, Link, NavLink } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -29,11 +29,11 @@ const StyledButton = styled.button`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: 0; 
+  padding: 0;
 `;
 
 const StyledIcon = styled(FontAwesomeIcon)`
-  width: 1.5em; 
+  width: 1.5em;
   height: 1.5em;
   pointer-events: none;
 `;
@@ -47,41 +47,63 @@ const StyledButtonDisabled = styled.button`
   margin: 0.5rem;
   border: none;
   border-radius: 0.2rem;
-   cursor: ${({ isClickable }) => (isClickable ? "pointer" : "not-allowed")};
+   cursor: ${({ isClickable }) => (isClickable ? 'pointer' : 'not-allowed')};
   opacity: ${({ isClickable }) => (isClickable ? 1 : 0.5)};
-  pointer-events: ${({ isClickable }) => (isClickable ? "auto" : "none")};
+  pointer-events: ${({ isClickable }) => (isClickable ? 'auto' : 'none')};
 `;
-export default function NextPrevButtons({ prev, next, buttonOnClick, isClickable = true}) {
+export default function NextPrevButtons({
+  prev,
+  next,
+  buttonOnClick,
+  isClickable = true,
+}) {
   return (
     <Container>
-      {prev !== "home" ? (
+      {prev !== 'home' ? (
         // this is if the previous page is not the home page
         <>
-          <StyledButton onClick={buttonOnClick} name={prev}>
-            <StyledIcon icon="angles-left" />
+          <StyledButton
+            onClick={buttonOnClick}
+            name={prev}
+            aria-label={`to-${prev}`}
+          >
+            <StyledIcon icon='angles-left' />
           </StyledButton>
-          <StyledButton onClick={isClickable ? buttonOnClick : undefined} name={next} isClickable={isClickable}>
-            <StyledIcon icon="angles-right" />
+          <StyledButton
+            onClick={isClickable ? buttonOnClick : undefined}
+            aria-label={`to-${next}`}
+            name={next}
+            isClickable={isClickable}
+          >
+            <StyledIcon icon='angles-right' />
           </StyledButton>
         </>
       ) : (
         <>
-        {/*  this is if the previous page is the home page*/}
-          <StyledNavLink to="/">
+          {/*  this is if the previous page is the home page*/}
+          <StyledNavLink to='/' aria-label={`to-home`}>
             <StyledButton>
-              <StyledIcon icon="angles-left"/>
+              <StyledIcon icon='angles-left' />
             </StyledButton>
           </StyledNavLink>
-          {next !== "no-next" && !isClickable &&(
+          {next !== 'no-next' && !isClickable && (
             // this is if a setting is making the next page unavailable
-            <StyledButtonDisabled onClick={isClickable ? buttonOnClick : undefined} name={next} isClickable={isClickable}>
-              <StyledIcon icon="angles-right" />
+            <StyledButtonDisabled
+              onClick={isClickable ? buttonOnClick : undefined}
+              aria-label={`to-${next}`}
+              name={next}
+              isClickable={isClickable}
+            >
+              <StyledIcon icon='angles-right' />
             </StyledButtonDisabled>
           )}
-          {next !== "no-next" && isClickable &&(
-            
-            <StyledButton onClick={buttonOnClick} name={next}>
-              <StyledIcon icon="angles-right" />
+          {next !== 'no-next' && isClickable && (
+            <StyledButton
+              onClick={buttonOnClick}
+              name={next}
+              aria-label={`to-${next}`}
+            >
+              <StyledIcon icon='angles-right' />
             </StyledButton>
           )}
         </>

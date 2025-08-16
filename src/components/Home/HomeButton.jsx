@@ -1,5 +1,5 @@
-import { styled } from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { styled } from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const HomeOption = styled.button`
   border: 1px black solid;
@@ -29,12 +29,12 @@ const HomeOption = styled.button`
 `;
 
 /**
- * @param {{ text: string, faIcon: any }} props
+ * @param {{ text: string, faIcon: any , dataId: string}} props
  */
 
-export default function HomeButton({ text, faIcon }) {
+export default function HomeButton({ text, faIcon, dataId }) {
   return (
-    <HomeOption>
+    <HomeOption data-testid={dataId}>
       <FontAwesomeIcon icon={faIcon} />
       <span>{text}</span>
     </HomeOption>

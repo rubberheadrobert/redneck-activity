@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
-import { styled } from "styled-components";
+import { useState, useEffect } from 'react';
+import { styled } from 'styled-components';
 
-import {addPlayersTexts} from "../../../utils/texts"
-import {ROUTES} from "../../../utils/routes"
-import PlayerInput from "./PlayerInput/PlayerInput";
-import NextPrevButtons from "../../UI/NextPrevButtons/NextPrevButtons";
-import img from "../../../images/purple-paper.avif";
-import Container from "../../UI/Container/Container.tsx";
+import { addPlayersTexts } from '../../../utils/texts';
+import { ROUTES } from '../../../utils/routes';
+import PlayerInput from './PlayerInput/PlayerInput';
+import NextPrevButtons from '../../UI/NextPrevButtons/NextPrevButtons';
+import img from '../../../images/purple-paper.avif';
+import Container from '../../UI/Container/Container';
+import { AddPlayersProps } from '../../../types/index';
 
 const InputContainer = styled.div`
   display: flex;
@@ -124,11 +125,10 @@ export default function AddPlayers({
   handleCreateGameSettings,
   playersOnChange,
   players,
-  playersAllOnChange,
   playersLengthOnChange,
   numOfTeams,
   numOfTeamsOnChange,
-}) {
+}: AddPlayersProps) {
   const [numOfPlayers, setNumOfPlayers] = useState(6);
 
   const [playersSubmitted, setPlayersSubmitted] = useState(false);
@@ -138,9 +138,9 @@ export default function AddPlayers({
   }, [numOfPlayers]);
 
   useEffect(() => {
-    setNumOfPlayers(numOfPlayers)
-    numOfTeamsOnChange(numOfTeams)
-  }, [])
+    setNumOfPlayers(numOfPlayers);
+    numOfTeamsOnChange(numOfTeams);
+  }, []);
 
   // useEffect(() => {
   //   // load numOfPlayers from localStorage
@@ -210,29 +210,31 @@ export default function AddPlayers({
   ));
 
   return (
-    <Container backgroundImage={img} secondColor={"#8236d6"}>
+    <Container backgroundImage={img} secondColor={'#8236d6'}>
       <h1>Add Players</h1>
 
       <InputContainer>
         <div>
           <h2>Number of Players</h2>
           <input
-            type="text"
+            type='text'
             value={numOfPlayers}
-            onChange={(e) => setNumOfPlayers(e.target.value)}
+            onChange={(e) => setNumOfPlayers(Number(e.target.value))}
             placeholder={addPlayersTexts.numOfPlayers}
+            data-testid='num-of-players-input'
           />
         </div>
 
         <div>
           <h2>Number of Teams</h2>
           <input
-            type="text"
+            type='text'
             onChange={(e) => {
-              numOfTeamsOnChange(e.target.value);
+              numOfTeamsOnChange(Number(e.target.value));
             }}
             value={numOfTeams}
             placeholder={addPlayersTexts.numOfTeams}
+            data-testid='num-of-teams-input'
           />
         </div>
       </InputContainer>

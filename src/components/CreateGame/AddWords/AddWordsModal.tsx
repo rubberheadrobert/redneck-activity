@@ -1,12 +1,12 @@
-import React from "react";
-import { styled } from "styled-components";
-import WordInput from "./WordInput";
-import {ADD_WORDS_CONSTS} from "../../../utils/constants"
+import React from 'react';
+import { styled } from 'styled-components';
+import WordInput from './WordInput';
+import { ADD_WORDS_CONSTS } from '../../../utils/constants';
 const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100% !important; 
+  width: 100% !important;
   height: 100% !important;
   background: rgba(0, 0, 0, 0.5);
   display: flex;
@@ -15,7 +15,7 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalComp = styled.div`
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   background-color: rgb(130, 54, 214);
   padding: 20px;
   border-radius: 8px;
@@ -42,7 +42,7 @@ const ModalComp = styled.div`
 `;
 
 interface AddWordsModalProps {
-  onClose: () => void;
+  onClose: (event: React.MouseEvent<HTMLButtonElement>) => void;
   currentWords: string[];
   showWordsModal: boolean;
   wordsEditOnChange: (index: number, newWord: string) => void;
@@ -76,9 +76,9 @@ export default function AddWordsModal({
         <ModalComp>
           <h2>Double check the words you added!</h2>
           {inputs}
-          <Close onClick={onClose} name={ADD_WORDS_CONSTS.TEAMS}>
+          <button onClick={onClose} name={ADD_WORDS_CONSTS.TEAMS}>
             Next Player
-          </Close>
+          </button>
         </ModalComp>
       </ModalOverlay>
     );
