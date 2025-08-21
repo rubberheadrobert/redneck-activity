@@ -1,12 +1,12 @@
 import TeamInput from "./TeamInput";
 import { styled } from "styled-components";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Team from "./Team/Team";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {addTeamsTexts} from "../../../utils/texts"
 import {ROUTES} from "../../../utils/routes"
 import {ADD_TEAMS_CONSTS} from "../../../utils/constants"
-
+import AddTeamsProps from "../../../types/index"
 const TeamsContent = styled.div`
   display: flex;
   margin: 0;
@@ -62,12 +62,10 @@ export default function AddTeams({
   teamNames,
   teamNameOnChange,
   shownOptionsOnChange,
-  
   playersInTeamsOnChange,
-
   handleCreateGameSettings,
-}) {
-  const playersInTeams = generateTeams();
+}: AddTeamsProps) {
+  const [playersInTeams, setPlayersInTeams] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const showNext = () => {
@@ -82,51 +80,50 @@ export default function AddTeams({
     }
   };
 
-  function generatePlayersInTeams() {
-    const teams = [];
-    let teamIndex = 0; 
+  useEffect(() => {
+    function generatePlayersInTeams() {
+      const teams = [];
+      let teamIndex = 0;
 
-    for (let index = 0; index < playersArray.length; index++) {
-      console.log(teamIndex);
-      let player = {};
+      for (let index = 0; index < playersArray.length; index++) {
+        let player = {};
 
-      if (index % numOfTeams == 0) {
-        teamIndex = 0;
-      } else {
-        teamIndex++;
-      }
-
-      player[ADD_TEAMS_CONSTS.NAME] = playersArray[index][ADD_TEAMS_CONSTS.NAME];
-      player[ADD_TEAMS_CONSTS.teamIndex] = teamIndex; 
-
-      teams.push(player);
-    }
-    return teams;
-  }
-  
-
-  function generateTeams() {
-    
-    const playersInTeams = generatePlayersInTeams();
-    
-    const teams = [];
-
-    for (let i = 0; i < numOfTeams; i++) {
-      const team = { team: teamNames[i].name, players: [] }; 
-
-      for (let j = 0; j < playersInTeams.length; j++) {
-        if (playersInTeams[j][ADD_TEAMS_CONSTS.TEAM_INDEX] === i) {
-          
-          team.players.push(playersInTeams[j]);
+        if (index % numOfTeams === 0) {
+          teamIndex = 0;
+        } else {
+          teamIndex++;
         }
+
+        player[ADD_TEAMS_CONSTS.NAME] = playersArray[index][ADD_TEAMS_CONSTS.NAME];
+        player[ADD_TEAMS_CONSTS.TEAM_INDEX] = teamIndex;
+
+        teams.push(player);
       }
+      return teams;
+    }
+
+    function generateTeams() {
+      const playersInTeams = generatePlayersInTeams();
+      const teams = [];
+
+      for (let i = 0; i < numOfTeams; i++) {
+        const team = { team: teamNames[i].name, players: [] };
+
+        for (let j = 0; j < playersInTeams.length; j++) {
+          if (playersInTeams[j][ADD_TEAMS_CONSTS.TEAM_INDEX] === i) {
+            team.players.push(playersInTeams[j]);
+          }
+        }
         teams.push(team);
       }
 
+      return teams;
+    }
+
+    const teams = generateTeams();
+    setPlayersInTeams(teams);
     playersInTeamsOnChange(teams);
-   
-    return teams;
-  }
+  }, [playersArray]);
 
   function shuffle() {
     const shuffledPlayers = [...playersArray];

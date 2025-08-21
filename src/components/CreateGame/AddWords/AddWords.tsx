@@ -8,6 +8,7 @@ import AddWordsModal from './AddWordsModal';
 import { ROUTES } from '../../../utils/routes';
 import { ADD_WORDS_CONSTS } from '../../../utils/constants';
 import { AddWordsProps } from '../../../types/index';
+import { useNavigate } from 'react-router-dom';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -77,6 +78,7 @@ export default function AddWords({
   wordsOnChange,
   wordsEditOnChange,
 }: AddWordsProps) {
+ 
   const [currentWord, setCurrentWord] = useState<string>('');
   const [currentDisplayedWords, setCurrentDisplayedWords] = useState<string[]>(
     []
@@ -135,23 +137,30 @@ export default function AddWords({
 
   function handleNextPlayer(event: any) {
     wordsOnChange(currentDisplayedWords);
+      console.log("****IN handleNextPlayer")
 
     if (isLastPlayer) {
+      console.log("****handleNextPlayer: isLastPlayer")
       const storedValue = localStorage.getItem(ADD_WORDS_CONSTS.WORDS);
       let existingWords = storedValue ? JSON.parse(storedValue) : [];
 
       existingWords.push(currentDisplayedWords);
       let mergedWords = existingWords.concat(currentDisplayedWords);
       localStorage.setItem(ADD_WORDS_CONSTS.WORDS, JSON.stringify(mergedWords));
-      handleCreateGameSettings(event);
-      return;
+      // handleCreateGameSettings({ target: { name: ROUTES.TEAMS } });
+      // return;
+
+    } else {
+      currentPlayer.current = currentPlayer.current + 1;
+
+      
+      setCurrentDisplayedWords([]);
+      currentWordIndex.current = 0;
+      setCurrentWordsLeft(wordsAmount);
     }
-    currentPlayer.current = currentPlayer.current + 1;
 
     setCanAddWords(true);
-    setCurrentDisplayedWords([]);
-    currentWordIndex.current = 0;
-    setCurrentWordsLeft(wordsAmount);
+    
     if (currentPlayer.current == playersAmount) {
       setIsLastPlayer(true);
     }

@@ -89,3 +89,15 @@ export interface PlayerInputProps {
   startValue: string;
   name: string;
 }
+
+export interface AddTeamsProps {
+  numOfTeams: number
+  playersArray: Player[]
+  playersAllOnChange: (value: Player[]) => void
+  teamNames: string[]
+  teamNameOnChange: (value: string[]) => void
+  shownOptionsOnChange: (value: string) => void
+  playersInTeamsOnChange: (value: PlayersInTeam) => void
+  handleCreateGameSettings: (event: React.FormEvent | React.MouseEvent) => void;
+
+}
