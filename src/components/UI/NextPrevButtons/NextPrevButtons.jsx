@@ -82,7 +82,7 @@ export default function NextPrevButtons({
         <>
           {/*  this is if the previous page is the home page*/}
           <StyledNavLink to='/' aria-label={`to-home`}>
-            <StyledButton>
+            <StyledButton aria-label={`to-home`}>
               <StyledIcon icon='angles-left' />
             </StyledButton>
           </StyledNavLink>

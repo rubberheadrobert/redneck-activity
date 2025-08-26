@@ -79,7 +79,7 @@ export default function Settings({
           </TeamsToggleButton>
         </section>
 
-        <ToggleInformation>
+        <ToggleInformation data-testid='teams-info'>
           {teamsRandomized
             ? settingsTexts.teamsRandomized
             : settingsTexts.teamsNotRandomized}
@@ -117,7 +117,7 @@ export default function Settings({
             : "Each player will play with their own phone"}
         </ToggleInformation> */}
         {/* use this when multiphone logic has NOT been implemented yet */}
-        <ToggleInformation>
+        <ToggleInformation data-testid='phones-info'>
           {isSinglePhone
             ? settingsTexts.singlePhone
             : settingsTexts.featureNotImplemented}
