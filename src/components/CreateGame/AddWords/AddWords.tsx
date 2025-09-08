@@ -104,7 +104,7 @@ export default function AddWords({
     try {
       setIsLoading(true);
       const response = await fetch(
-        'https://random-word-api.herokuapp.com/word'
+        'https://random-word-api.vercel.app/api?words=1'
       );
       const data = await response.json();
       const word = data[0];
@@ -136,23 +136,28 @@ export default function AddWords({
   function handleNextPlayer(event: any) {
     wordsOnChange(currentDisplayedWords);
 
-    if (isLastPlayer) {
-      const storedValue = localStorage.getItem(ADD_WORDS_CONSTS.WORDS);
-      let existingWords = storedValue ? JSON.parse(storedValue) : [];
+    const storedValue = localStorage.getItem(ADD_WORDS_CONSTS.WORDS);
+    let existingWords = storedValue ? JSON.parse(storedValue) : [];
 
-      existingWords.push(currentDisplayedWords);
-      let mergedWords = existingWords.concat(currentDisplayedWords);
-      localStorage.setItem(ADD_WORDS_CONSTS.WORDS, JSON.stringify(mergedWords));
+    existingWords.push(currentDisplayedWords);
+    let mergedWords = existingWords.concat(currentDisplayedWords);
+    localStorage.setItem(ADD_WORDS_CONSTS.WORDS, JSON.stringify(mergedWords));
+
+    if (currentPlayer.current + 1 >= playersAmount) {
+      // last player, go to next page
       handleCreateGameSettings(event);
       return;
     }
+
+    // move to next player
     currentPlayer.current = currentPlayer.current + 1;
 
     setCanAddWords(true);
     setCurrentDisplayedWords([]);
     currentWordIndex.current = 0;
     setCurrentWordsLeft(wordsAmount);
-    if (currentPlayer.current == playersAmount) {
+
+    if (currentPlayer.current === playersAmount - 1) {
       setIsLastPlayer(true);
     }
   }
@@ -164,7 +169,7 @@ export default function AddWords({
   return (
     <Container backgroundImage={img} secondColor={'#8236d6'}>
       <h1>Add Words</h1>
-      <WordArea>
+      <WordArea data-testid='input-container'>
         <h2> {currentPlayerObj.name}</h2>
         <p>please add {currentWordsLeft} more words</p>
         <CurrentWordInput
@@ -199,10 +204,11 @@ export default function AddWords({
       />
       {!canAddWords && (
         <AddWordsModal
-          onClose={handleNextPlayer}
+          onClose={(event) => handleNextPlayer(event)}
           currentWords={currentDisplayedWords}
           showWordsModal={!canAddWords}
           wordsEditOnChange={wordsEditOnChange}
+          isLastPlayer={isLastPlayer}
         />
       )}
     </Container>

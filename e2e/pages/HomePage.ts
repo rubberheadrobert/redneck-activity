@@ -22,6 +22,7 @@ export class HomePage {
   }
 
   async clickCreateGame() {
+    await this.createGameBtn.waitFor({ state: 'visible' });
     await this.createGameBtn.click();
   }
 

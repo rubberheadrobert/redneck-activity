@@ -238,7 +238,7 @@ export default function AddPlayers({
           />
         </div>
       </InputContainer>
-      <PlayerInputContainer>
+      <PlayerInputContainer data-testid='player-inputs-area'>
         <h2>Players</h2>
         {inputs}
       </PlayerInputContainer>

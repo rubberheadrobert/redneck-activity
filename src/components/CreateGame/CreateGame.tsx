@@ -36,7 +36,7 @@ export default function CreateGame() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [numOfTeams, setNumOfTeams] = useState<number>(2);
   const [words, setWords] = useState<string[]>([]);
-  const [wordsAmount, setWordsAmount] = useState<number>(5);
+  const [wordsAmount, setWordsAmount] = useState<number>(2);
   const [teamNames, setTeamNames] = useState<TeamName[]>([]);
   const [showCreateGameModal, setShowCreateGameModal] = useState<boolean>(
     hasLocalStorage()
@@ -60,6 +60,7 @@ export default function CreateGame() {
   }
 
   function handleCreateGameSettings(event: any): void {
+    console.log('in handlecreategamesettigns');
     console.log(event.target.name);
     if (event.target.name === _HOME) {
       setShownOptions(_HOME);

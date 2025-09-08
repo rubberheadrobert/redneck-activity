@@ -12,7 +12,7 @@ test('can click create game and go back to home page', async ({ page }) => {
   const settingsPage = new SettingsPage(page);
 
   const homePageTitle = homePage.title;
-  await expect(homePageTitle).toBeVisible();
+  await expect(homePageTitle).toHaveText('Redneck Activity');
 
   const findGameBtnText = await homePage.getButtonText(homePage.findGameBtn);
   await expect(findGameBtnText).toContain('Find Game');

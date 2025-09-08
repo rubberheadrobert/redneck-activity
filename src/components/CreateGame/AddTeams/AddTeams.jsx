@@ -1,11 +1,11 @@
-import TeamInput from "./TeamInput";
-import { styled } from "styled-components";
-import { useRef, useState } from "react";
-import Team from "./Team/Team";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {addTeamsTexts} from "../../../utils/texts"
-import {ROUTES} from "../../../utils/routes"
-import {ADD_TEAMS_CONSTS} from "../../../utils/constants"
+import TeamInput from './TeamInput';
+import { styled } from 'styled-components';
+import { useRef, useState, useEffect } from 'react';
+import Team from './Team/Team';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { addTeamsTexts } from '../../../utils/texts';
+import { ROUTES } from '../../../utils/routes';
+import { ADD_TEAMS_CONSTS } from '../../../utils/constants';
 
 const TeamsContent = styled.div`
   display: flex;
@@ -52,9 +52,9 @@ const StyledNextButton = styled.button`
   color: whitesmoke;
 `;
 
-import NextPrevButtons from "../../UI/NextPrevButtons/NextPrevButtons";
-import Container from "../../UI/Container/Container";
-import img from "../../../images/paper-background-2.jpg";
+import NextPrevButtons from '../../UI/NextPrevButtons/NextPrevButtons';
+import Container from '../../UI/Container/Container';
+import img from '../../../images/paper-background-2.jpg';
 export default function AddTeams({
   numOfTeams,
   playersArray,
@@ -62,13 +62,37 @@ export default function AddTeams({
   teamNames,
   teamNameOnChange,
   shownOptionsOnChange,
-  
+
   playersInTeamsOnChange,
 
   handleCreateGameSettings,
 }) {
-  const playersInTeams = generateTeams();
+  const [playersInTeams, setPlayersInTeams] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const teams = generateTeamsWithoutStateUpdate();
+    setPlayersInTeams(teams);
+    playersInTeamsOnChange(teams); // safely update parent after render
+  }, [playersArray, numOfTeams, teamNames]);
+
+  function generateTeamsWithoutStateUpdate() {
+    const playersInTeams = generatePlayersInTeams();
+    const teams = [];
+
+    for (let i = 0; i < numOfTeams; i++) {
+      const team = { team: teamNames[i].name, players: [] };
+
+      for (let j = 0; j < playersInTeams.length; j++) {
+        if (playersInTeams[j][ADD_TEAMS_CONSTS.TEAM_INDEX] === i) {
+          team.players.push(playersInTeams[j]);
+        }
+      }
+      teams.push(team);
+    }
+
+    return teams;
+  }
 
   const showNext = () => {
     if (currentIndex < playersInTeams.length - 1) {
@@ -84,7 +108,7 @@ export default function AddTeams({
 
   function generatePlayersInTeams() {
     const teams = [];
-    let teamIndex = 0; 
+    let teamIndex = 0;
 
     for (let index = 0; index < playersArray.length; index++) {
       console.log(teamIndex);
@@ -96,35 +120,33 @@ export default function AddTeams({
         teamIndex++;
       }
 
-      player[ADD_TEAMS_CONSTS.NAME] = playersArray[index][ADD_TEAMS_CONSTS.NAME];
-      player[ADD_TEAMS_CONSTS.teamIndex] = teamIndex; 
+      player[ADD_TEAMS_CONSTS.NAME] =
+        playersArray[index][ADD_TEAMS_CONSTS.NAME];
+      player[ADD_TEAMS_CONSTS.teamIndex] = teamIndex;
 
       teams.push(player);
     }
     return teams;
   }
-  
 
   function generateTeams() {
-    
     const playersInTeams = generatePlayersInTeams();
-    
+
     const teams = [];
 
     for (let i = 0; i < numOfTeams; i++) {
-      const team = { team: teamNames[i].name, players: [] }; 
+      const team = { team: teamNames[i].name, players: [] };
 
       for (let j = 0; j < playersInTeams.length; j++) {
         if (playersInTeams[j][ADD_TEAMS_CONSTS.TEAM_INDEX] === i) {
-          
           team.players.push(playersInTeams[j]);
         }
       }
-        teams.push(team);
-      }
+      teams.push(team);
+    }
 
     playersInTeamsOnChange(teams);
-   
+
     return teams;
   }
 
@@ -146,16 +168,16 @@ export default function AddTeams({
   ));
 
   return (
-    <Container backgroundImage={img} secondColor={"#ff6600"}>
+    <Container backgroundImage={img} secondColor={'#ff6600'}>
       <h1>Add Teams</h1>
       <ShuffleButton onClick={shuffle}>Shuffle</ShuffleButton>
       <TeamsContent>
-        <StyledPrevButton buttonName="prev" onClick={showPrevious}>
-          <FontAwesomeIcon icon="angles-left" />
+        <StyledPrevButton buttonName='prev' onClick={showPrevious}>
+          <FontAwesomeIcon icon='angles-left' />
         </StyledPrevButton>
         {content}
-        <StyledNextButton buttonName="next" onClick={showNext}>
-          <FontAwesomeIcon icon="angles-right" />
+        <StyledNextButton buttonName='next' onClick={showNext}>
+          <FontAwesomeIcon icon='angles-right' />
         </StyledNextButton>
       </TeamsContent>
       <NextPrevButtons

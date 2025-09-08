@@ -46,6 +46,7 @@ interface AddWordsModalProps {
   currentWords: string[];
   showWordsModal: boolean;
   wordsEditOnChange: (index: number, newWord: string) => void;
+  isLastPlayer: boolean;
 }
 
 const Close = styled.button``;
@@ -55,12 +56,13 @@ export default function AddWordsModal({
   currentWords,
   showWordsModal,
   wordsEditOnChange,
+  isLastPlayer,
 }: AddWordsModalProps) {
   const inputs = currentWords.map((word, index) => {
     return (
       <WordInput
         key={index}
-        name={`word${index + 1}`}
+        label={`word${index + 1}`}
         index={index}
         wordsEditOnChange={wordsEditOnChange}
         word={word}
@@ -73,11 +75,11 @@ export default function AddWordsModal({
   } else {
     return (
       <ModalOverlay>
-        <ModalComp>
+        <ModalComp data-testid='word-modal'>
           <h2>Double check the words you added!</h2>
           {inputs}
           <button onClick={onClose} name={ADD_WORDS_CONSTS.TEAMS}>
-            Next Player
+            {isLastPlayer ? 'Go to Game Settings' : 'Next Player'}
           </button>
         </ModalComp>
       </ModalOverlay>
