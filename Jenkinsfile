@@ -50,20 +50,19 @@ pipeline {
 
         stage('Wait for App') {
             steps {
-                // Wait until the app responds with HTTP 200, max 30 tries
-                bat '''
-                powershell -Command "
-                $url = '${APP_URL}';
-                $maxAttempts = 30;
+                powershell '''
+                $url = "${env.APP_URL}"
+                $maxAttempts = 30
                 for ($i=0; $i -lt $maxAttempts; $i++) {
                     try {
                         $resp = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 2
                         if ($resp.StatusCode -eq 200) { exit 0 }
-                    } catch { Start-Sleep -Seconds 2 }
+                    } catch {
+                        Start-Sleep -Seconds 2
+                    }
                 }
                 Write-Host 'App did not become ready in time.'
                 exit 1
-                "
                 '''
             }
         }
