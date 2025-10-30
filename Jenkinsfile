@@ -69,12 +69,15 @@ pipeline {
         stage('Trigger E2E Job') {
             steps {
                 script {
-                    build job: "${E2E_JOB}",
-                          parameters: [string(name:'APP_URL', value: "${APP_URL}")],
-                          wait: false
+                    // Pass APP_URL as a string parameter
+                    build job: "redneck-activity-e2e-tests",
+                        parameters: [
+                            string(name: 'APP_URL', value: 'http://localhost:3000')
+                        ],
+                        wait: false // keep asynchronous if you want
                 }
             }
-        }
+}
     }
 
     post {
