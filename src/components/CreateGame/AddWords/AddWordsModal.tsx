@@ -73,7 +73,7 @@ export default function AddWordsModal({
   } else {
     return (
       <ModalOverlay>
-        <ModalComp>
+        <ModalComp id="add-words-modal">
           <h2>Double check the words you added!</h2>
           {inputs}
           <button onClick={onClose} name={ADD_WORDS_CONSTS.TEAMS}>

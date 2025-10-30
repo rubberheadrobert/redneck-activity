@@ -4,6 +4,7 @@
   left: 0;
   width: 100%;
   height: inherit;
+   min-height: 100vh; 
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -17,6 +18,7 @@
   border-radius: 8px;
   border: 0.4rem solid rgb(255, 248, 172);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  color: whitesmoke;
   position: relative;
 }
 
@@ -46,6 +48,7 @@
   padding-bottom: 0.7rem;
   background: rgb(71, 125, 152);
   border-radius: 8px;
+  text-align: center;
 }
 
 .modal > table > tr > td > .fa-icon {

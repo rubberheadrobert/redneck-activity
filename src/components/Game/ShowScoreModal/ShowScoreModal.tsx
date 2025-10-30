@@ -1,11 +1,15 @@
 import "./ShowScoreModal.css";
 import React, { useState } from "react";
-export default function ShowScoreModal({ onClose, showScoreModal, teamNames }) {
-  const sortedTeams = teamNames.sort((a, b) => b.points - a.points);
+import {ShowScoreModalProps, GameWord} from "../../../types/index"
+
+
+
+export default function ShowScoreModal({ onClose, showScoreModal, teams}: ShowScoreModalProps) {
+  const sortedTeams = teams.sort((a, b) => (b.teamPoints ?? 0) - (a.teamPoints ?? 0));
 
   function scoreContent() {
     console.log("inShowScoreModalScoreContent");
-    console.log("teamNames", teamNames);
+    console.log("teamNames", teams);
     console.log("sortedTeams", sortedTeams);
     return (
       <>
@@ -20,8 +24,8 @@ export default function ShowScoreModal({ onClose, showScoreModal, teamNames }) {
             {sortedTeams.map((team, index) => (
               <tr key={index}>
                 <td className="team-place">{index + 1}.</td>
-                <td>{team.newName}</td>
-                <td>{team.points}</td>
+                <td>{team.team}</td>
+                <td>{team.teamPoints}</td>
               </tr>
             ))}
           </table>

@@ -130,7 +130,7 @@ export default function AddPlayers({
   numOfTeamsOnChange,
 }: AddPlayersProps) {
   const [numOfPlayers, setNumOfPlayers] = useState(6);
-
+  const [showError, setShowError] = useState(false)
   const [playersSubmitted, setPlayersSubmitted] = useState(false);
 
   useEffect(() => {
@@ -141,6 +141,16 @@ export default function AddPlayers({
     setNumOfPlayers(numOfPlayers);
     numOfTeamsOnChange(numOfTeams);
   }, []);
+
+  useEffect(() => {
+    console.log(players)
+  if (numOfPlayers >= 4 && numOfTeams >= 2 && !players.some(p => p.name.trim() === "")) {
+    setShowError(false);
+  } else {
+    setShowError(true);
+  }
+
+}, [numOfPlayers, showError,numOfTeams, players]);
 
   // useEffect(() => {
   //   // load numOfPlayers from localStorage
@@ -238,6 +248,9 @@ export default function AddPlayers({
           />
         </div>
       </InputContainer>
+      {showError && (
+        <p id="error-message">Please have at least 4 Players and 2 Teams and make sure all players are filled.</p>
+      )}
       <PlayerInputContainer>
         <h2>Players</h2>
         {inputs}
@@ -245,7 +258,9 @@ export default function AddPlayers({
       <NextPrevButtons
         prev={ROUTES.SETTINGS_SLIDERS}
         next={ROUTES.WORDS}
+        dataClickable={!showError}
         buttonOnClick={handleCreateGameSettings}
+        isClickable={!showError}
       />
     </Container>
   );

@@ -54,6 +54,7 @@ const StyledButtonDisabled = styled.button`
 export default function NextPrevButtons({
   prev,
   next,
+  dataClickable = true,
   buttonOnClick,
   isClickable = true,
 }) {
@@ -63,6 +64,7 @@ export default function NextPrevButtons({
         // this is if the previous page is not the home page
         <>
           <StyledButton
+           
             onClick={buttonOnClick}
             name={prev}
             aria-label={`to-${prev}`}
@@ -70,6 +72,7 @@ export default function NextPrevButtons({
             <StyledIcon icon='angles-left' />
           </StyledButton>
           <StyledButton
+          data-clickable={dataClickable}
             onClick={isClickable ? buttonOnClick : undefined}
             aria-label={`to-${next}`}
             name={next}
@@ -89,6 +92,7 @@ export default function NextPrevButtons({
           {next !== 'no-next' && !isClickable && (
             // this is if a setting is making the next page unavailable
             <StyledButtonDisabled
+            data-clickable={dataClickable}
               onClick={isClickable ? buttonOnClick : undefined}
               aria-label={`to-${next}`}
               name={next}
@@ -99,6 +103,7 @@ export default function NextPrevButtons({
           )}
           {next !== 'no-next' && isClickable && (
             <StyledButton
+            data-clickable={isClickable}
               onClick={buttonOnClick}
               name={next}
               aria-label={`to-${next}`}

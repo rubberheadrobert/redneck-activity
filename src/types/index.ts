@@ -1,8 +1,6 @@
 import { ReactNode } from 'react';
+import {ADD_TEAMS_CONSTS} from "../utils/constants"
 
-export interface TeamName {
-  name: string;
-}
 
 export interface Team {
   oldName: string;
@@ -10,19 +8,26 @@ export interface Team {
 }
 
 export interface Player {
-  id: number;
-  name: string;
+   [ADD_TEAMS_CONSTS.NAME]: string;
+    [ADD_TEAMS_CONSTS.TEAM_INDEX]: number;
+  points?: number; 
+  isNext?: boolean
 }
 
 export interface PlayerInTeam {
   name: string;
   teamIndex: number;
+  points?: number;
+  isNext?: boolean
 }
 
 export interface PlayersInTeam {
   team: string;
   players: PlayerInTeam[];
+  teamPoints?: number;
 }
+
+type TeamType = PlayersInTeam
 
 export interface AddWordsProps {
   playersAmount: number;
@@ -95,9 +100,39 @@ export interface AddTeamsProps {
   playersArray: Player[]
   playersAllOnChange: (value: Player[]) => void
   teamNames: string[]
-  teamNameOnChange: (value: string[]) => void
+  teamNameOnChange: (index: number, name: string) => void
   shownOptionsOnChange: (value: string) => void
-  playersInTeamsOnChange: (value: PlayersInTeam) => void
+  playersInTeamsOnChange: (teams: PlayersInTeam[]) => void;
   handleCreateGameSettings: (event: React.FormEvent | React.MouseEvent) => void;
+}
 
+export interface GameProps {
+  words: string[]
+  shownOptionsOnChange: (value: string) => void
+  playersInTeams: PlayersInTeam[]
+  secondsRound: number
+}
+
+export interface GameWord {
+  word: string
+  isGuessed: boolean
+}
+
+export interface ModalProp {
+  onClose: () => void
+  currentWords: GameWord[]
+  showWordsModal: boolean
+  currentWordOnChange: (wordToChange: string) => void
+}
+
+export interface ShowScoreModalProps {
+  onClose: () => void
+  showScoreModal: boolean
+  teams: PlayersInTeam[] 
+}
+
+export interface FinishGameModalProps {
+  onClose: () => void
+  showFinishGameModal: boolean
+  teams: PlayersInTeam[]
 }

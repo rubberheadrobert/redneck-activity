@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Settings from './Settings/Settings';
 import AddPlayers from './AddPlayers/AddPlayers';
 import AddTeams from './AddTeams/AddTeams';
-import './CreateGame.css';
 import WaitingForPlayers from './WaitingForPlayers/WaitingForPlayers';
 import Game from '../Game/Game';
 import AddWords from './AddWords/AddWords';
@@ -11,10 +10,9 @@ import SettingsSliders from './SettingsSliders/SettingsSliders';
 import CreateGameModal from './CreateGameModal';
 import {
   Player,
-  TeamName,
   Team,
   PlayerInTeam,
-  PlayersInTeam,
+  PlayersInTeam, 
 } from '../../types/index';
 
 const _HOME = 'home';
@@ -36,13 +34,15 @@ export default function CreateGame() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [numOfTeams, setNumOfTeams] = useState<number>(2);
   const [words, setWords] = useState<string[]>([]);
-  const [wordsAmount, setWordsAmount] = useState<number>(5);
-  const [teamNames, setTeamNames] = useState<TeamName[]>([]);
+  const [wordsAmount, setWordsAmount] = useState<number>(4);
+  const [teamNames, setTeamNames] = useState<string[]>([]);
   const [showCreateGameModal, setShowCreateGameModal] = useState<boolean>(
     hasLocalStorage()
   );
 
   const [playersInTeams, setPlayersInTeams] = useState<PlayersInTeam[]>([]);
+  const teamNameObjectsRef = useRef<{ oldName: string; name: string }[]>([]);
+
 
   //states for Settings
 
@@ -114,18 +114,11 @@ export default function CreateGame() {
 
     if (arguments.length === 2) {
       setTeamNames((prevArray) => {
-        const newArray = [...prevArray];
-        console.log('teamNameOnChange newArray', newArray);
-        console.log('teamNameOnChange name' + name);
-        if (newArray[index]) {
-          newArray[index] = { ...newArray[index], name };
-        }
-        // if(newArray[index]){
-        //     newArray[index]["name"] = name;
-        // }
-
-        console.log(newArray);
-        return newArray;
+        const newArray = [...prevArray]; // copy array
+      if (newArray[index] !== undefined) {
+        newArray[index] = name; // assign string directly
+      }
+      return newArray;
       });
     } else if (arguments.length === 1) {
     }
@@ -133,14 +126,19 @@ export default function CreateGame() {
 
   function numOfTeamsOnChange(num: number) {
     setNumOfTeams(num);
-    const teamNames: Team[] = [];
+
+    const teamNamesArray: string[] = [];
+    const teamNameObjects: { oldName: string; name: string }[] = [];
+
     for (let i = 0; i < num; i++) {
       const teamName = `Team ${i + 1}`;
-      teamNames.push({ oldName: teamName, name: teamName });
+      teamNamesArray.push(teamName);
+      teamNameObjects.push({ oldName: teamName, name: teamName });
     }
-    console.log('numOfTeamsOnChange:', teamNames);
-    setTeamNames(teamNames);
-  }
+
+    teamNameObjectsRef.current = teamNameObjects;
+    setTeamNames(teamNamesArray);
+}
 
   // function playersOnChange(index, newName) {
   //   setPlayers((prevArray) => {
@@ -177,6 +175,7 @@ export default function CreateGame() {
 
   function wordsOnChange(newWords: string[]) {
     setWords((prevWords) => prevWords.concat(newWords));
+
   }
 
   function wordsAmountOnChange(num: number) {
@@ -188,8 +187,6 @@ export default function CreateGame() {
   }
 
   function playersInTeamsOnChange(arr: PlayersInTeam[]) {
-    console.log('in playersInTeamsOnChange');
-
     setPlayersInTeams(arr);
   }
 
@@ -250,16 +247,14 @@ export default function CreateGame() {
       )}
       {shownOptions == _WAITING && <WaitingForPlayers />}
 
-      {/* {shownOptions == _GAME && (
+      {shownOptions == _GAME && (
         <Game
-          players={players}
           secondsRound={secondsRound}
           words={words}
-          teamNames={teamNames}
-          shownOptionsOnChange={shownOptionsOnChange}
-          teamNameOnChange={teamNameOnChange}
+          playersInTeams={playersInTeams}
+          shownOptionsOnChange={setShownOptions}
         />
-      )} */}
+      )}
       {shownOptions == _HOME && <Home />}
       {showCreateGameModal && (
         <CreateGameModal

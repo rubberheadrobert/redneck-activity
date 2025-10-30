@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 export default function StartRoundModal({
   onClose,
-  currentRound,
   currentTeam,
   currentPlayer,
   showNextRoundModal,
@@ -18,7 +17,7 @@ export default function StartRoundModal({
           <span className="close" onClick={onClose}>
             &times;
           </span>
-          <table className>
+          <table>
             <tr>
               <td>
                 <FontAwesomeIcon className="fa-icon" icon="user" />

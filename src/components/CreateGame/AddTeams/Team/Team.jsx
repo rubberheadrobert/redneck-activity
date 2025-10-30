@@ -37,7 +37,7 @@ export default function Team({
   ));
 
   return (
-    <TeamComp
+    <TeamComp id="team-container"
       style={{
         display: currentIndex === index ? "block" : "none",
         margin: "0px",

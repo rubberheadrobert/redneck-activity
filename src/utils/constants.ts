@@ -1,6 +1,6 @@
 export const ADD_TEAMS_CONSTS = {
-    NAME: "name",
-    TEAM_INDEX: "teamIndex"
+    NAME: "name" as const,
+  TEAM_INDEX: "teamIndex" as const,
 }
 
 export const ADD_WORDS_CONSTS = {

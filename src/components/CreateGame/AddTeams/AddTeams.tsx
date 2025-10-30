@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {addTeamsTexts} from "../../../utils/texts"
 import {ROUTES} from "../../../utils/routes"
 import {ADD_TEAMS_CONSTS} from "../../../utils/constants"
-import AddTeamsProps from "../../../types/index"
+import {AddTeamsProps, PlayersInTeam, Player} from "../../../types/index"
 const TeamsContent = styled.div`
   display: flex;
   margin: 0;
@@ -16,41 +16,56 @@ const TeamsContent = styled.div`
   align-items: center;
 `;
 
-const ShuffleButton = styled.button`
+export const ShuffleButton = styled.button<ButtonProps>`
   background-color: darkblue;
   border-radius: 0.5rem;
   padding: 1rem;
   border: 5px solid #ff6600;
   font-size: 1rem;
   font-family: inherit;
-
   color: whitesmoke;
+  width: 50%;
 `;
 
-const StyledPrevButton = styled.button`
+export const StyledPrevButton = styled.button<ButtonProps>`
   position: absolute;
   top: 10%;
   left: 15px;
-  background-color: rgb(0, 0, 100, 0.8);
+  background-color: rgba(0, 0, 100, 0.8);
   border-radius: 1rem;
   padding: 0.4rem;
   border: none;
   font-size: 0.9rem;
   color: whitesmoke;
+
+  ${(props) =>
+    props.buttonName === "prev" &&
+    `
+      border: 2px solid yellow;
+    `}
 `;
 
-const StyledNextButton = styled.button`
+export const StyledNextButton = styled.button<ButtonProps>`
   position: absolute;
   top: 10%;
   right: 15px;
-  background-color: rgb(0, 0, 100, 0.8);
-
+  background-color: rgba(0, 0, 100, 0.8);
   border-radius: 1rem;
   padding: 0.4rem;
   border: none;
   font-size: 1rem;
   color: whitesmoke;
+
+  ${(props) =>
+    props.buttonName === "next" &&
+    `
+      border: 2px solid yellow;
+    `}
 `;
+
+interface ButtonProps {
+  buttonName?: "prev" | "next"; // restrict to allowed values if you want
+}
 
 import NextPrevButtons from "../../UI/NextPrevButtons/NextPrevButtons";
 import Container from "../../UI/Container/Container";
@@ -65,7 +80,7 @@ export default function AddTeams({
   playersInTeamsOnChange,
   handleCreateGameSettings,
 }: AddTeamsProps) {
-  const [playersInTeams, setPlayersInTeams] = useState([])
+  const [playersInTeams, setPlayersInTeams] = useState<PlayersInTeam[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const showNext = () => {
@@ -81,33 +96,37 @@ export default function AddTeams({
   };
 
   useEffect(() => {
-    function generatePlayersInTeams() {
-      const teams = [];
+    function generatePlayersInTeams(): Player[] {
+      const teams: Player[] = [];
       let teamIndex = 0;
 
       for (let index = 0; index < playersArray.length; index++) {
-        let player = {};
+        const player: Player = {
+          [ADD_TEAMS_CONSTS.NAME]: playersArray[index][ADD_TEAMS_CONSTS.NAME],
+          [ADD_TEAMS_CONSTS.TEAM_INDEX]: teamIndex,
+          points: 0,
+          isNext: false
+        };
 
-        if (index % numOfTeams === 0) {
+        if ((index + 1) % numOfTeams === 0) {
           teamIndex = 0;
         } else {
           teamIndex++;
         }
 
-        player[ADD_TEAMS_CONSTS.NAME] = playersArray[index][ADD_TEAMS_CONSTS.NAME];
-        player[ADD_TEAMS_CONSTS.TEAM_INDEX] = teamIndex;
-
         teams.push(player);
       }
+
       return teams;
     }
 
-    function generateTeams() {
+    function generateTeams(): PlayersInTeam[] {
       const playersInTeams = generatePlayersInTeams();
-      const teams = [];
+      const teams: PlayersInTeam[] = [];
 
       for (let i = 0; i < numOfTeams; i++) {
-        const team = { team: teamNames[i].name, players: [] };
+        console.log("******" + teamNames[i])
+        const team: PlayersInTeam = { team: teamNames[i], players: [] };
 
         for (let j = 0; j < playersInTeams.length; j++) {
           if (playersInTeams[j][ADD_TEAMS_CONSTS.TEAM_INDEX] === i) {
@@ -120,27 +139,16 @@ export default function AddTeams({
       return teams;
     }
 
-    const teams = generateTeams();
+    const teams: PlayersInTeam[] = generateTeams();
     setPlayersInTeams(teams);
-    playersInTeamsOnChange(teams);
-  }, [playersArray]);
+    playersInTeamsOnChange(teams)
+  }, [playersArray, numOfTeams, teamNames]);
 
   function shuffle() {
     const shuffledPlayers = [...playersArray];
-    shuffledPlayers.sort((a, b) => 0.5 - Math.random());
+    shuffledPlayers.sort(() => 0.5 - Math.random());
     playersAllOnChange(shuffledPlayers);
   }
-
-  const content = playersInTeams.map((team, index) => (
-    <Team
-      key={index}
-      team={team.team}
-      players={team.players}
-      currentIndex={currentIndex}
-      index={index}
-      teamNameOnChange={teamNameOnChange}
-    />
-  ));
 
   return (
     <Container backgroundImage={img} secondColor={"#ff6600"}>
@@ -150,7 +158,16 @@ export default function AddTeams({
         <StyledPrevButton buttonName="prev" onClick={showPrevious}>
           <FontAwesomeIcon icon="angles-left" />
         </StyledPrevButton>
-        {content}
+        {playersInTeams.map((team, index) => (
+        <Team
+          key={index}
+          team={team.team}
+          players={team.players}
+          currentIndex={currentIndex}
+          index={index}
+          teamNameOnChange={teamNameOnChange}
+        />
+      ))}
         <StyledNextButton buttonName="next" onClick={showNext}>
           <FontAwesomeIcon icon="angles-right" />
         </StyledNextButton>

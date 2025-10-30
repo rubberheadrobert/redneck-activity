@@ -24,6 +24,8 @@ const ContainerComp = styled.div<{
   min-height: 100vh;
   padding: 0 1rem;
   text-align: center;
+  align-items: center;
+
 
   & h1 {
     background-color: ${({ $secondColor }) => $secondColor || 'transparent'};

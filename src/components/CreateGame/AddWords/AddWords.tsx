@@ -135,36 +135,34 @@ export default function AddWords({
     currentWordIndex.current = currentWordIndex.current + 1;
   }
 
-  function handleNextPlayer(event: any) {
-    wordsOnChange(currentDisplayedWords);
-      console.log("****IN handleNextPlayer")
+  function handleNextPlayer() {
+  wordsOnChange(currentDisplayedWords);
+  console.log("****IN handleNextPlayer");
 
-    if (isLastPlayer) {
-      console.log("****handleNextPlayer: isLastPlayer")
-      const storedValue = localStorage.getItem(ADD_WORDS_CONSTS.WORDS);
-      let existingWords = storedValue ? JSON.parse(storedValue) : [];
+  // check before updating player
+  const isNowLastPlayer = currentPlayer.current === playersAmount;
 
-      existingWords.push(currentDisplayedWords);
-      let mergedWords = existingWords.concat(currentDisplayedWords);
-      localStorage.setItem(ADD_WORDS_CONSTS.WORDS, JSON.stringify(mergedWords));
-      // handleCreateGameSettings({ target: { name: ROUTES.TEAMS } });
-      // return;
+  if (isNowLastPlayer) {
+    console.log("****Last player finished");
+    const storedValue = localStorage.getItem(ADD_WORDS_CONSTS.WORDS);
+    let existingWords = storedValue ? JSON.parse(storedValue) : [];
 
-    } else {
-      currentPlayer.current = currentPlayer.current + 1;
+    existingWords.push(currentDisplayedWords);
+    const mergedWords = existingWords.concat(currentDisplayedWords);
+    localStorage.setItem(ADD_WORDS_CONSTS.WORDS, JSON.stringify(mergedWords));
 
-      
-      setCurrentDisplayedWords([]);
-      currentWordIndex.current = 0;
-      setCurrentWordsLeft(wordsAmount);
-    }
-
-    setCanAddWords(true);
-    
-    if (currentPlayer.current == playersAmount) {
-      setIsLastPlayer(true);
-    }
+    // ✅ Move to next page
+    handleCreateGameSettings({ target: { name: ROUTES.TEAMS } });
+    return;
   }
+
+  // Otherwise, move to next player
+  currentPlayer.current = currentPlayer.current + 1;
+  setCurrentDisplayedWords([]);
+  currentWordIndex.current = 0;
+  setCurrentWordsLeft(wordsAmount);
+  setCanAddWords(true);
+}
 
   const content = currentDisplayedWords.map((word) => {
     return <div>{word}</div>;
@@ -173,9 +171,9 @@ export default function AddWords({
   return (
     <Container backgroundImage={img} secondColor={'#8236d6'}>
       <h1>Add Words</h1>
-      <WordArea>
+      <WordArea id="word-input-container">
         <h2> {currentPlayerObj.name}</h2>
-        <p>please add {currentWordsLeft} more words</p>
+        <p>Please add {currentWordsLeft} more words.</p>
         <CurrentWordInput
           type='text'
           value={currentWord}
