@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: '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', url: 'https://github.com/rubberheadrobert/redneck-activity'
+                git credentialsId: 'github-cred', url: 'https://github.com/rubberheadrobert/redneck-activity'
             }
         }
 
