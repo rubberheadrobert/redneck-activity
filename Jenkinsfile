@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs "node21"   // Your NodeJS installation in Jenkins
-    }
-
     environment {
         APP_PORT = "3000"
         APP_URL = "http://localhost:3000"
@@ -76,11 +72,13 @@ pipeline {
 
         stage('Trigger E2E job') {
             steps {
-                script {
-                    build job: env.E2E_JOB, parameters: [string(name:'APP_URL', value: env.APP_URL)], wait: false
+                    script {
+                        build job: 'redneck-activity-e2e-tests',
+                            parameters: [string(name:'APP_URL', value: 'http://localhost:3000')],
+                            wait: false
+                    }
                 }
             }
-        }
     }
 
     post {
