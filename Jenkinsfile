@@ -36,16 +36,16 @@ pipeline {
             }
         }
 
-        stage('Start Server (Background)') {
+        stage('Start Server (Blocking)') {
             steps {
                 bat '''
                 REM Kill any process on port
                 for /f "tokens=5" %%a in ('netstat -ano ^| findstr :%APP_PORT% ^| findstr LISTENING') do taskkill /F /PID %%a
-                REM Start React static server in background
-                start /B npx serve -s build -l %APP_PORT%
+                REM Start React static server (blocking)
+                npx serve -s build -l %APP_PORT%
                 '''
             }
-}
+        }
 
 
         stage('Wait for App') {
