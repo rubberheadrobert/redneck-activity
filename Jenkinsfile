@@ -38,12 +38,11 @@ pipeline {
 
         stage('Start Server (Background)') {
             steps {
-                // Kill process on APP_PORT, then start server in background
                 bat '''
-                REM Kill any process using the port
+                REM Kill any process on the port
                 for /f "tokens=5" %%a in ('netstat -ano ^| findstr :%APP_PORT% ^| findstr LISTENING') do taskkill /F /PID %%a
-                REM Start server in background using PowerShell
-                powershell -Command "Start-Process -FilePath 'npx' -ArgumentList 'serve -s build -l %APP_PORT%' -WindowStyle Hidden"
+                REM Start server in background
+                start /B npx serve -s build -l %APP_PORT%
                 '''
             }
         }
