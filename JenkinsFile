@@ -1,0 +1,94 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs "node21"   // Your NodeJS installation in Jenkins
+    }
+
+    environment {
+        APP_PORT = "3000"
+        APP_URL = "http://localhost:3000"
+        E2E_JOB = "redneck-activity-e2e-tests"   // Change to your E2E Jenkins job name
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git credentialsId: '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', url: 'https://github.com/rubberheadrobert/redneck-activity'
+            }
+        }
+
+        stage('Install') {
+            steps {
+                bat 'npm ci'
+            }
+        }
+
+        stage('Unit Tests') {
+            steps {
+                bat 'npm test -- --watchAll=false || exit /b 0'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat 'npm run build'
+            }
+        }
+
+        stage('Start Server (background)') {
+            steps {
+                // Kill process using the port, then start server
+                bat '''
+                REM Kill process on APP_PORT
+                for /f "tokens=5" %%a in ('netstat -ano ^| findstr :%APP_PORT% ^| findstr LISTENING') do taskkill /F /PID %%a
+                REM Start server in background using PowerShell
+                powershell -Command "Start-Process -FilePath 'npx' -ArgumentList 'serve -s build -l %APP_PORT%' -WindowStyle Hidden"
+                '''
+            }
+        }
+
+        stage('Wait for App') {
+            steps {
+                // Wait until the app responds with HTTP 200, max 30 tries
+                bat '''
+                powershell -Command "
+                $url = '${APP_URL}';
+                $maxAttempts = 30;
+                for ($i=0; $i -lt $maxAttempts; $i++) {
+                    try {
+                        $resp = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 2
+                        if ($resp.StatusCode -eq 200) { exit 0 }
+                    } catch { Start-Sleep -Seconds 2 }
+                }
+                Write-Host 'App did not become ready in time.'
+                exit 1
+                "
+                '''
+            }
+        }
+
+        stage('Archive build') {
+            steps {
+                archiveArtifacts artifacts: 'build/**', fingerprint: true
+            }
+        }
+
+        stage('Trigger E2E job') {
+            steps {
+                script {
+                    build job: env.E2E_JOB, parameters: [string(name:'APP_URL', value: env.APP_URL)], wait: false
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo "Pipeline finished. Check logs: ${env.BUILD_URL}"
+        }
+        failure {
+            echo "Build failed."
+        }
+    }
+}
