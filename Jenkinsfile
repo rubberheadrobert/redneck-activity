@@ -8,9 +8,9 @@ pipeline {
     }
 
     stages {
-        stage('Checkout React') {
+       stage('Checkout React') {
             steps {
-                url: 'https://github.com/rubberheadrobert/redneck-activity', branch: "main"
+                git branch: 'main', url: 'https://github.com/rubberheadrobert/redneck-activity'
             }
         }
 
