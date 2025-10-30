@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Checkout React') {
             steps {
-                git credentialsId: 'github-cred', url: 'https://github.com/rubberheadrobert/redneck-activity'
+                url: 'https://github.com/rubberheadrobert/redneck-activity', branch: "main"
             }
         }
 
