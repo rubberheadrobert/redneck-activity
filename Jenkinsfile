@@ -39,20 +39,21 @@ pipeline {
         stage('Start Server (Background)') {
             steps {
                 bat '''
-                REM Kill any process on the port
+                REM Kill any process on port
                 for /f "tokens=5" %%a in ('netstat -ano ^| findstr :%APP_PORT% ^| findstr LISTENING') do taskkill /F /PID %%a
-                REM Start server in background
+                REM Start React static server in background
                 start /B npx serve -s build -l %APP_PORT%
                 '''
             }
-        }
+}
+
 
         stage('Wait for App') {
             steps {
                 powershell '''
                 $url = "${env.APP_URL}"
-                $maxAttempts = 60  # increase to 60 tries
-                $delay = 3         # 3 seconds between attempts
+                $maxAttempts = 60
+                $delay = 3
                 for ($i=0; $i -lt $maxAttempts; $i++) {
                     try {
                         $resp = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 2
@@ -65,7 +66,7 @@ pipeline {
                 exit 1
                 '''
             }
-}
+        }
 
         stage('Archive Build') {
             steps {
