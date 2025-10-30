@@ -52,20 +52,21 @@ pipeline {
             steps {
                 powershell '''
                 $url = "${env.APP_URL}"
-                $maxAttempts = 30
+                $maxAttempts = 60  # increase to 60 tries
+                $delay = 3         # 3 seconds between attempts
                 for ($i=0; $i -lt $maxAttempts; $i++) {
                     try {
                         $resp = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 2
                         if ($resp.StatusCode -eq 200) { exit 0 }
                     } catch {
-                        Start-Sleep -Seconds 2
+                        Start-Sleep -Seconds $delay
                     }
                 }
-                Write-Host 'App did not become ready in time.'
+                Write-Host "App did not become ready in time."
                 exit 1
                 '''
             }
-        }
+}
 
         stage('Archive Build') {
             steps {
