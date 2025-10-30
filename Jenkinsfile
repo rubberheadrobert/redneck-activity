@@ -46,15 +46,15 @@ pipeline {
         stage('Wait for App') {
             steps {
                 powershell '''
-                $url = "${env.APP_URL}"
-                $maxAttempts = 30
+                $maxAttempts = 70
+                $url = "http://localhost:3000"
                 for ($i=0; $i -lt $maxAttempts; $i++) {
                     try {
                         $resp = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 2
-                        if ($resp.StatusCode -eq 200) { exit 0 }
+                        if ($resp.StatusCode -eq 200) { Write-Host "App is ready"; exit 0 }
                     } catch { Start-Sleep -Seconds 2 }
                 }
-                Write-Host "App did not become ready in time."
+                Write-Error "App did not become ready in time."
                 exit 1
                 '''
             }
