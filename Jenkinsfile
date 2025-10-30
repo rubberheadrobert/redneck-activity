@@ -4,39 +4,43 @@ pipeline {
     environment {
         APP_PORT = "3000"
         APP_URL = "http://localhost:3000"
-        E2E_JOB = "redneck-activity-e2e-tests"   // Change to your E2E Jenkins job name
+        E2E_JOB = "redneck-activity-e2e-tests"   // Your E2E Jenkins job name
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout React') {
             steps {
-                git credentialsId: 'github-cred', url: 'https://github.com/rubberheadrobert/redneck-activity'
+                // Checkout the main branch of your React repo
+                git branch: 'main',
+                    url: 'https://github.com/rubberheadrobert/redneck-activity.git'
+                // If private, add: credentialsId: 'github-cred'
             }
         }
 
-        stage('Install') {
+        stage('Install Dependencies') {
             steps {
                 bat 'npm ci'
             }
         }
 
-        stage('Unit Tests') {
+        stage('Run Unit Tests') {
             steps {
+                // Do not fail pipeline on test failures
                 bat 'npm test -- --watchAll=false || exit /b 0'
             }
         }
 
-        stage('Build') {
+        stage('Build React App') {
             steps {
                 bat 'npm run build'
             }
         }
 
-        stage('Start Server (background)') {
+        stage('Start Server (Background)') {
             steps {
-                // Kill process using the port, then start server
+                // Kill process on APP_PORT, then start server in background
                 bat '''
-                REM Kill process on APP_PORT
+                REM Kill any process using the port
                 for /f "tokens=5" %%a in ('netstat -ano ^| findstr :%APP_PORT% ^| findstr LISTENING') do taskkill /F /PID %%a
                 REM Start server in background using PowerShell
                 powershell -Command "Start-Process -FilePath 'npx' -ArgumentList 'serve -s build -l %APP_PORT%' -WindowStyle Hidden"
@@ -64,21 +68,22 @@ pipeline {
             }
         }
 
-        stage('Archive build') {
+        stage('Archive Build') {
             steps {
                 archiveArtifacts artifacts: 'build/**', fingerprint: true
             }
         }
 
-        stage('Trigger E2E job') {
+        stage('Trigger E2E Job') {
             steps {
-                    script {
-                        build job: 'redneck-activity-e2e-tests',
-                            parameters: [string(name:'APP_URL', value: 'http://localhost:3000')],
-                            wait: false
-                    }
+                script {
+                    // Trigger the Selenium E2E job (separate repo)
+                    build job: "${E2E_JOB}",
+                        parameters: [string(name: 'APP_URL', value: "${APP_URL}")],
+                        wait: false
                 }
             }
+        }
     }
 
     post {
