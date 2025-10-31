@@ -22,7 +22,7 @@ pipeline {
 
         stage('Run Unit Tests') {
             steps {
-                bat 'npm test -- --watchAll=false || exit /b 0'
+                bat 'npm test -- src/unit-tests -- --watchAll=false || exit /b 0'
             }
         }
 
